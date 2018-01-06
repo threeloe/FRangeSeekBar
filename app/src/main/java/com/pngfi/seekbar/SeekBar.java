@@ -29,7 +29,7 @@ public class SeekBar extends View {
 
 
     private int lineHeight;
-    
+
 
 
     public SeekBar(Context context) {
