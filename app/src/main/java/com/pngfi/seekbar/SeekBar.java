@@ -29,9 +29,6 @@ public class SeekBar extends View {
 
 
     private int lineHeight;
-    private int lineWidth;
-
-
     
 
 
