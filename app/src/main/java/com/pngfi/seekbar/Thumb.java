@@ -22,10 +22,10 @@ public class Thumb {
     private int progressWidth;
 
 
-    public Thumb(Drawable drawable,float min,float max) {
+    public Thumb(Drawable drawable, float min, float max) {
         this.thumbDrawable = drawable;
-        this.min=min;
-        this.max=max;
+        this.min = min;
+        this.max = max;
     }
 
 
@@ -43,13 +43,27 @@ public class Thumb {
     }
 
 
-    public void onTouch(int x, int y) {
+    public boolean contains(float x, float y) {
+        //增大一点触摸范围
+        final int extra = 0;
+        return x >= thumbDrawable.getBounds().left - extra && x <= thumbDrawable.getBounds().right + extra && y >= top - extra && y <= top + thumbDrawable.getIntrinsicHeight() + extra;
+    }
+
+
+    public void onSlide(float eventX, float eventY) {
+        int x= (int) eventX;
+        int y= (int) eventY;
         if (y == 0) {
             progress = min + currentPercent(x) * (max - min);
             thumbDrawable.setBounds(x - getWidth() / 2, top, x + getWidth() / 2, top + getHeight());
         } else {
 
         }
+    }
+
+
+    public float getProgress(){
+        return progress;
     }
 
 

@@ -17,8 +17,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import static com.pngfi.seekbar.R.attr.min;
-
 /**
  * Created by pngfi on 2018/1/6.
  */
@@ -82,11 +80,6 @@ public class SeekBar extends View {
     private OnSeekBarChangeListener onSeekBarChangeListener;
 
 
-
-
-
-
-
     public SeekBar(Context context) {
         this(context, null);
     }
@@ -108,8 +101,8 @@ public class SeekBar extends View {
         if (mMax <= mMin) {
             throw new IllegalArgumentException("max must be greater than min");
         }
-        mLesserThumb = new Thumb(drawable,mMin,mMax);
-        mLargerThumb = new Thumb(drawable.mutate().getConstantState().newDrawable(),mMin,mMax);
+        mLesserThumb = new Thumb(drawable, mMin, mMax);
+        mLargerThumb = new Thumb(drawable.mutate().getConstantState().newDrawable(), mMin, mMax);
 
         ta.recycle();
 
@@ -141,8 +134,8 @@ public class SeekBar extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mLineWidth = getWidth() - getPaddingLeft() - getPaddingRight() - mLesserThumb.getWidth();
         mCenterY = getHeight() / 2;
-        mLesserThumb.setRect(0,mCenterY-mLesserThumb.getHeight()/2);
-        mLargerThumb.setRect(mLesserThumb.getWidth(),mCenterY-mLargerThumb.getHeight()/2);
+        mLesserThumb.setRect(0, mCenterY - mLesserThumb.getHeight() / 2);
+        mLargerThumb.setRect(mLesserThumb.getWidth(), mCenterY - mLargerThumb.getHeight() / 2);
         mLine = new RectF(mLesserThumb.getWidth() / 2, mCenterY - mLineHeight / 2, getWidth() - mLesserThumb.getWidth() / 2, mCenterY + mLineHeight / 2);
 
     }
@@ -164,7 +157,6 @@ public class SeekBar extends View {
     }
 
 
-    
     public void setOnSeekBarChangeListener(OnSeekBarChangeListener listener) {
         onSeekBarChangeListener = listener;
     }
@@ -191,20 +183,43 @@ public class SeekBar extends View {
     }
 
 
+    private Thumb mSlidingThumb;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                break;
+                boolean result = true;
+                if (mLesserThumb.contains(event.getX(), event.getY())) {
+                    mSlidingThumb = mLesserThumb;
+                } else if (mLargerThumb.contains(event.getX(), event.getY())) {
+                    mSlidingThumb = mLargerThumb;
+                } else {
+                    result = false;
+                }
+                return result;
             case MotionEvent.ACTION_MOVE:
+                if (mSlidingThumb == mLesserThumb) {
+                    float lessProgress = mLesserThumb.getProgress();
+                    float largerProgress = mLargerThumb.getProgress();
+                    if (lessProgress >= largerProgress){
+                        
+                    }
+                } else {
+
+                }
+                mSlidingThumb.onSlide(event.getX(), event.getY());
+
                 break;
+
             case MotionEvent.ACTION_UP:
                 break;
             case MotionEvent.ACTION_CANCEL:
                 break;
         }
-        return super.onTouchEvent(event);
+
+        return true;
     }
 
 
@@ -218,17 +233,13 @@ public class SeekBar extends View {
     }
 
 
-
-
-
-
-    private static final String SUPER_STATE="super_state";
+    private static final String SUPER_STATE = "super_state";
 
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable parcel = super.onSaveInstanceState();
-        Bundle bundle=new Bundle();
-        bundle.putParcelable(SUPER_STATE,parcel);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(SUPER_STATE, parcel);
         return bundle;
 
     }
@@ -236,13 +247,12 @@ public class SeekBar extends View {
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        Bundle bundle= (Bundle) state;
+        Bundle bundle = (Bundle) state;
         Parcelable superState = bundle.getParcelable(SUPER_STATE);
 
         super.onRestoreInstanceState(superState);
 
     }
-
 
 
 }
