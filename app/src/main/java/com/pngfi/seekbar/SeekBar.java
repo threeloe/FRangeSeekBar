@@ -133,10 +133,14 @@ public class SeekBar extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mLineWidth = getWidth() - getPaddingLeft() - getPaddingRight() - mLesserThumb.getWidth();
-        mCenterY = getHeight() / 2;
-        mLesserThumb.setRect(0, mCenterY - mLesserThumb.getHeight() / 2);
-        mLargerThumb.setRect(mLesserThumb.getWidth(), mCenterY - mLargerThumb.getHeight() / 2);
         mLine = new RectF(mLesserThumb.getWidth() / 2, mCenterY - mLineHeight / 2, getWidth() - mLesserThumb.getWidth() / 2, mCenterY + mLineHeight / 2);
+
+        mCenterY = getHeight() / 2;
+        mLesserThumb.setRect(0, mCenterY - mLesserThumb.getHeight() / 2,);
+        mLargerThumb.setRect(mLesserThumb.getWidth(), mCenterY - mLargerThumb.getHeight() / 2);
+
+
+
 
     }
 
@@ -185,6 +189,8 @@ public class SeekBar extends View {
 
     private Thumb mSlidingThumb;
 
+    private float mDownX;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -200,17 +206,23 @@ public class SeekBar extends View {
                 }
                 return result;
             case MotionEvent.ACTION_MOVE:
+                float lessProgress = mLesserThumb.getProgress();
+                float largerProgress = mLargerThumb.getProgress();
+                float dx = event.getX() - mDownX;
                 if (mSlidingThumb == mLesserThumb) {
-                    float lessProgress = mLesserThumb.getProgress();
-                    float largerProgress = mLargerThumb.getProgress();
-                    if (lessProgress >= largerProgress){
-                        
+                    if (lessProgress > largerProgress){
+                        mSlidingThumb=mLargerThumb;
+                    }else {
+                        mLesserThumb.onSlide(event.getX(),0);
                     }
                 } else {
-
+                    if (largerProgress<lessProgress){
+                        mSlidingThumb=mLesserThumb;
+                    }else {
+                        mLargerThumb.onSlide(event.getX(),0);
+                    }
                 }
-                mSlidingThumb.onSlide(event.getX(), event.getY());
-
+                invalidate();
                 break;
 
             case MotionEvent.ACTION_UP:

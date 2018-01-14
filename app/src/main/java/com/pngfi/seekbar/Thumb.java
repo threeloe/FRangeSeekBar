@@ -5,9 +5,13 @@ import android.graphics.drawable.Drawable;
 
 public class Thumb {
 
-    //the left  when the progress is min
+    //the x  when the progress is min
     private int left;
+    //the x when the progress is max
+    private int right;
+
     private int top;
+    private int bottom;
 
     private float min;
     private float max;
@@ -29,12 +33,17 @@ public class Thumb {
     }
 
 
-    public void setRect(int left, int top) {
+    public void setRect(int left, int top,int right,int bottom) {
         this.left = left;
         this.top = top;
+        this.right=right;
+        this.bottom=bottom;
         setProgress(progress);
     }
 
+    public void setProgressWidth(int progressWidth){
+        this.progressWidth=progressWidth;
+    }
 
     public void setProgress(float progress) {
         this.progress = progress;

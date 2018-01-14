@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="12dp"
+    android:orientation="vertical"
     tools:context="com.pngfi.seekbar.MainActivity">
 
     <com.pngfi.seekbar.RangeSeekBar
-        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/seekBar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginEnd="10dp"
@@ -20,8 +20,6 @@
         app:cellMode="number"
         app:cells="5"
         app:hintBGHeight="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:lineColorEdge="#E9E9E9"
         app:lineColorSelected="@color/colorAccent"
         app:max="20000"
@@ -29,14 +27,13 @@
         app:progressHintMode="alwaysHide"
         app:seekBarHeight="6dp"
         app:seekBarMode="range"
-
         app:thumbResId="@drawable/ic_thumb"
         app:thumbSize="17dp"
-        tools:layout_editor_absoluteY="0dp" />
+         />
 
 
     <com.pngfi.seekbar.SeekBar
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
         app:lineColor="#E9E9E9"
@@ -46,4 +43,4 @@
 
     </com.pngfi.seekbar.SeekBar>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

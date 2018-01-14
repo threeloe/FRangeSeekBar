@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <attr name="max" format="float" />
+    <attr name="min" format="float" />
+    <attr name="lineColorSelected" format="color" />
+
     <declare-styleable name="RangeSeekBar">
         <attr name="max"  />
         <attr name="min"/>
@@ -37,9 +41,7 @@
 
     </declare-styleable>
 
-    <attr name="max" format="float" />
-    <attr name="min" format="float" />
-    <attr name="lineColorSelected" format="color" />
+
 
 
     <declare-styleable name="SeekBar">
@@ -51,8 +53,6 @@
             <enum name="vertical" value="1" />
         </attr>
         <attr name="thumb" format="reference" />
-
-
         <attr name="max" />
         <attr name="min" />
         <attr name="lineColorSelected" />
