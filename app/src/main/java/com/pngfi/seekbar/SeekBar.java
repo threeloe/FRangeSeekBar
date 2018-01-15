@@ -21,7 +21,7 @@ import android.view.ViewConfiguration;
  * Created by pngfi on 2018/1/6.
  */
 
-public class SeekBar extends View {
+public class SeekBar extends View implements Thumb.OnProgressChangeListener {
 
 
     private static final int DEFAULT_LINE_HEIGHT = 5; //dp
@@ -32,18 +32,6 @@ public class SeekBar extends View {
     //the orientation value
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
-
-
-    //the mMax value of SeekBar
-    private float mMax;
-    //the min value of SeekBar
-    private float mMin;
-
-
-    //the current value of lesser thumb
-    private float mLesserProgress;
-    //the current value of larger thumb
-    private float mLargerProgress;
 
 
     //the lesser thumb
@@ -62,9 +50,9 @@ public class SeekBar extends View {
 
 
     @ColorInt
-    private int mLineColor;
+    private int mProgressBackground;
     @ColorInt
-    private int mLineColorSelected;
+    private int mProgressColor;
 
     private int mScaledTouchSlop;
 
@@ -80,6 +68,11 @@ public class SeekBar extends View {
     private OnSeekBarChangeListener onSeekBarChangeListener;
 
 
+    private Thumb mSlidingThumb;
+
+    private float mLastX;
+
+
     public SeekBar(Context context) {
         this(context, null);
     }
@@ -92,21 +85,28 @@ public class SeekBar extends View {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SeekBar, defStyleAttr, 0);
         mLineHeight = ta.getDimension(R.styleable.SeekBar_lineHeight, dp2px(DEFAULT_LINE_HEIGHT));
-        mLineColor = ta.getColor(R.styleable.SeekBar_lineColor, Color.GRAY);
-        mLineColorSelected = ta.getColor(R.styleable.SeekBar_lineColorSelected, Color.parseColor("#FF4081"));
+        mProgressBackground = ta.getColor(R.styleable.SeekBar_progressBackground, Color.GRAY);
+        mProgressColor = ta.getColor(R.styleable.SeekBar_progressColor, Color.parseColor("#FF4081"));
         Drawable drawable = ta.hasValue(R.styleable.SeekBar_thumb) ? ta.getDrawable(R.styleable.SeekBar_thumb) : getResources().getDrawable(R.drawable.ic_thumb);
 
-        mMin = ta.getFloat(R.styleable.SeekBar_min, 0);
-        mMax = ta.getFloat(R.styleable.SeekBar_max, 100);
-        if (mMax <= mMin) {
+        float min = ta.getFloat(R.styleable.SeekBar_min, 0);
+        float max = ta.getFloat(R.styleable.SeekBar_max, 100);
+        if (max <= min) {
             throw new IllegalArgumentException("max must be greater than min");
         }
-        mLesserThumb = new Thumb(drawable, mMin, mMax);
-        mLargerThumb = new Thumb(drawable.mutate().getConstantState().newDrawable(), mMin, mMax);
-
+        mLesserThumb = new Thumb(getContext(), drawable, min, max);
+        mLargerThumb = new Thumb(getContext(), drawable.mutate().getConstantState().newDrawable(), min, max);
+        mLesserThumb.setOnProgressChangeListener(this);
+        mLargerThumb.setOnProgressChangeListener(this);
         ta.recycle();
 
         mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        initPaint();
+    }
+
+
+    private void initPaint() {
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     }
 
@@ -132,27 +132,24 @@ public class SeekBar extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        mCenterY = getHeight() / 2;
         mLineWidth = getWidth() - getPaddingLeft() - getPaddingRight() - mLesserThumb.getWidth();
         mLine = new RectF(mLesserThumb.getWidth() / 2, mCenterY - mLineHeight / 2, getWidth() - mLesserThumb.getWidth() / 2, mCenterY + mLineHeight / 2);
-
-        mCenterY = getHeight() / 2;
-        mLesserThumb.setRect(0, mCenterY - mLesserThumb.getHeight() / 2,);
-        mLargerThumb.setRect(mLesserThumb.getWidth(), mCenterY - mLargerThumb.getHeight() / 2);
-
-
-
+        mLesserThumb.setRect((int) mLine.left - mLesserThumb.getWidth() / 2, mCenterY - mLesserThumb.getHeight() / 2, (int) mLine.right - mLesserThumb.getWidth() - mLargerThumb.getWidth() / 2, mCenterY + mLesserThumb.getHeight() / 2);
+        mLargerThumb.setRect((int) mLine.left + mLesserThumb.getWidth() / 2, mCenterY - mLargerThumb.getHeight() / 2, (int) mLine.right - mLargerThumb.getWidth() / 2, mCenterY + mLargerThumb.getHeight() / 2);
 
     }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(mLineColor);
-
-
+        mPaint.setColor(mProgressBackground);
         // draw line
         canvas.drawRoundRect(mLine, DEFAULT_RADIUS_RATE * mLineHeight, DEFAULT_RADIUS_RATE * mLineHeight, mPaint);
+
+        //draw progress
+        mPaint.setColor(mProgressColor);
+        canvas.drawRect(mLesserThumb.getCenterPoint().x, mLine.top, mLargerThumb.getCenterPoint().x, mLine.bottom, mPaint);
 
         // draw thumb
         mLesserThumb.draw(canvas);
@@ -173,23 +170,13 @@ public class SeekBar extends View {
      * @param largerProgress
      */
     public void setProgress(float lesserProgress, float largerProgress) {
-        mLargerProgress = largerProgress;
-        mLesserProgress = lesserProgress;
-        if (onSeekBarChangeListener != null) {
-            onSeekBarChangeListener.onProgressChanged(this, lesserProgress, largerProgress, false);
+        if (lesserProgress > largerProgress) {
+            throw new IllegalArgumentException("lesserProgress must be less than largerProgress");
         }
-        invalidate();
+        mLesserThumb.setProgress(lesserProgress);
+        mLargerThumb.setProgress(largerProgress);
     }
 
-
-    private float currentPercent(float progress) {
-        return (progress - mMin) / (mMax - mMin);
-    }
-
-
-    private Thumb mSlidingThumb;
-
-    private float mDownX;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -197,6 +184,7 @@ public class SeekBar extends View {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 boolean result = true;
+                mLastX = event.getX();
                 if (mLesserThumb.contains(event.getX(), event.getY())) {
                     mSlidingThumb = mLesserThumb;
                 } else if (mLargerThumb.contains(event.getX(), event.getY())) {
@@ -208,23 +196,23 @@ public class SeekBar extends View {
             case MotionEvent.ACTION_MOVE:
                 float lessProgress = mLesserThumb.getProgress();
                 float largerProgress = mLargerThumb.getProgress();
-                float dx = event.getX() - mDownX;
+                float dx = event.getX() - mLastX;
+                mLastX = event.getX();
                 if (mSlidingThumb == mLesserThumb) {
-                    if (lessProgress > largerProgress){
-                        mSlidingThumb=mLargerThumb;
-                    }else {
-                        mLesserThumb.onSlide(event.getX(),0);
+                    if (lessProgress >= largerProgress && dx > 0) {
+                        mSlidingThumb = mLargerThumb;
+                    } else {
+                        mSlidingThumb.onSlide(dx, 0f);
                     }
                 } else {
-                    if (largerProgress<lessProgress){
-                        mSlidingThumb=mLesserThumb;
-                    }else {
-                        mLargerThumb.onSlide(event.getX(),0);
+                    if (largerProgress <= lessProgress && dx < 0) {
+                        mSlidingThumb = mLesserThumb;
+                    } else {
+                        mSlidingThumb.onSlide(dx, 0f);
                     }
                 }
                 invalidate();
                 break;
-
             case MotionEvent.ACTION_UP:
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -264,6 +252,14 @@ public class SeekBar extends View {
 
         super.onRestoreInstanceState(superState);
 
+    }
+
+
+    @Override
+    public void onProgressChanged(Thumb thumb, float progress, boolean fromUser) {
+        if (onSeekBarChangeListener != null) {
+            onSeekBarChangeListener.onProgressChanged(this, mLesserThumb.getProgress(), mLargerThumb.getProgress(), fromUser);
+        }
     }
 
 

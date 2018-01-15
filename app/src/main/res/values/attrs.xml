@@ -46,7 +46,8 @@
 
     <declare-styleable name="SeekBar">
         <attr name="lineHeight" format="dimension" />
-        <attr name="lineColor" format="color" />
+        <attr name="progressBackground" format="color" />
+        <attr name="progressColor" format="color" />
 
         <attr name="orientation" format="enum">
             <enum name="horizontal" value="0" />
@@ -55,7 +56,6 @@
         <attr name="thumb" format="reference" />
         <attr name="max" />
         <attr name="min" />
-        <attr name="lineColorSelected" />
 
     </declare-styleable>
 
