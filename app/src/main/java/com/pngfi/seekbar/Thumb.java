@@ -2,8 +2,12 @@ package com.pngfi.seekbar;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 
 public class Thumb {
 
@@ -27,11 +31,18 @@ public class Thumb {
      */
     private int progressWidth;
 
-
     private OnProgressChangeListener onProgressChangeListener;
 
 
     private Context context;
+
+
+    private Paint shadowPaint;
+    private int shadowRadius;
+    private int shadowOffsetX;
+    private int shadowOffsetY;
+    @ColorInt
+    private int shadowColor;
 
 
     public Thumb(Context context, Drawable drawable, float min, float max) {
@@ -40,6 +51,18 @@ public class Thumb {
         this.max = max;
         progress = min;
         this.context = context;
+
+        shadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        shadowPaint.setColor(Color.TRANSPARENT);
+        shadowPaint.setStyle(Paint.Style.FILL);
+    }
+
+
+    public void setShadow(int shadowRadius, int shadowOffsetX, int shadowOffsetY, int shadowColor) {
+        this.shadowColor=shadowColor;
+        this.shadowOffsetX=shadowOffsetX;
+        this.shadowOffsetY=shadowOffsetY;
+        this.shadowRadius=shadowRadius;
     }
 
 
@@ -66,7 +89,7 @@ public class Thumb {
 
 
     public boolean contains(float x, float y) {
-        //增大一点触摸范围
+        //increase the range of touch
         final float extra = context.getResources().getDisplayMetrics().density * 5;
         return x >= thumbDrawable.getBounds().left - extra && x <= thumbDrawable.getBounds().right + extra && y >= top - extra && y <= top + thumbDrawable.getIntrinsicHeight() + extra;
     }
@@ -93,13 +116,24 @@ public class Thumb {
     }
 
 
+    /**
+     * @return the height the contains the shadow
+     */
     public int getHeight() {
-        return thumbDrawable.getIntrinsicHeight();
+        return thumbDrawable.getIntrinsicHeight() + (shadowRadius + shadowOffsetY) * 2;
     }
 
 
+    /**
+     * @return the width that contains the shadow
+     */
     public int getWidth() {
-        return thumbDrawable.getIntrinsicWidth();
+        return thumbDrawable.getIntrinsicWidth() + (shadowRadius + shadowOffsetX) * 2;
+    }
+
+
+    public Drawable getThumbDrawable() {
+        return thumbDrawable;
     }
 
 
@@ -113,7 +147,11 @@ public class Thumb {
 
     public void draw(Canvas canvas) {
         float percent = (progress - min) / (max - min);
-        thumbDrawable.setBounds((int) (left + percent * progressWidth), top, (int) (left + percent * progressWidth + thumbDrawable.getIntrinsicWidth()), top + getHeight());
+        thumbDrawable.setBounds((int) (left + percent * progressWidth), top, (int) (left + percent * progressWidth + thumbDrawable.getIntrinsicWidth()), top + thumbDrawable.getIntrinsicHeight());
+
+        shadowPaint.setShadowLayer(shadowRadius, shadowOffsetX, shadowOffsetY, shadowColor);
+        canvas.drawOval(new RectF(thumbDrawable.getBounds()), shadowPaint);
+
         thumbDrawable.draw(canvas);
     }
 

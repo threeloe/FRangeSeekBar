@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
     android:orientation="vertical"
+    android:padding="12dp"
     tools:context="com.pngfi.seekbar.MainActivity">
 
     <com.pngfi.seekbar.RangeSeekBar
@@ -28,20 +28,21 @@
         app:seekBarHeight="6dp"
         app:seekBarMode="range"
         app:thumbResId="@drawable/ic_thumb"
-        app:thumbSize="17dp"
-         />
+        app:thumbSize="17dp" />
 
 
     <com.pngfi.seekbar.SeekBar
         android:id="@+id/seekbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
         android:layout_marginTop="50dp"
-        app:progressBackground="#E9E9E9"
-        app:min="0"
         app:max="100"
-       >
-    </com.pngfi.seekbar.SeekBar>
+        app:min="0"
+        app:progressBackground="#E9E9E9"
+        app:shadowColor="#19000000"
+        app:shadowOffsetX="0dp"
+        app:shadowOffsetY="2dp"
+        app:shadowRadius="5dp"></com.pngfi.seekbar.SeekBar>
 
 
     <TextView

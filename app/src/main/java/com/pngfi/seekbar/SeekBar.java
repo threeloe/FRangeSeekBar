@@ -44,7 +44,7 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
     private int mStepCount;
 
     //the height of line
-    private float mLineHeight;
+    private float mProgressHeight;
     //the width of line
     private float mLineWidth;
 
@@ -59,7 +59,7 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
     //the center of y alias
     private int mCenterY;
 
-    private RectF mLine;
+    private RectF mProgressLine;
 
     private Paint mPaint;
 
@@ -84,11 +84,11 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
     public SeekBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SeekBar, defStyleAttr, 0);
-        mLineHeight = ta.getDimension(R.styleable.SeekBar_lineHeight, dp2px(DEFAULT_LINE_HEIGHT));
+        mProgressHeight = ta.getDimension(R.styleable.SeekBar_progressHeight, dp2px(DEFAULT_LINE_HEIGHT));
         mProgressBackground = ta.getColor(R.styleable.SeekBar_progressBackground, Color.GRAY);
         mProgressColor = ta.getColor(R.styleable.SeekBar_progressColor, Color.parseColor("#FF4081"));
-        Drawable drawable = ta.hasValue(R.styleable.SeekBar_thumb) ? ta.getDrawable(R.styleable.SeekBar_thumb) : getResources().getDrawable(R.drawable.ic_thumb);
 
+        Drawable drawable = ta.hasValue(R.styleable.SeekBar_thumb) ? ta.getDrawable(R.styleable.SeekBar_thumb) : getResources().getDrawable(R.drawable.ic_thumb);
         float min = ta.getFloat(R.styleable.SeekBar_min, 0);
         float max = ta.getFloat(R.styleable.SeekBar_max, 100);
         if (max <= min) {
@@ -98,9 +98,19 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
         mLargerThumb = new Thumb(getContext(), drawable.mutate().getConstantState().newDrawable(), min, max);
         mLesserThumb.setOnProgressChangeListener(this);
         mLargerThumb.setOnProgressChangeListener(this);
+
+        int shadowRaidus= (int) ta.getDimension(R.styleable.SeekBar_shadowRadius,0);
+        int shadowColor=ta.getColor(R.styleable.SeekBar_shadowColor,Color.TRANSPARENT);
+        int shadowOffsetX= (int) ta.getDimension(R.styleable.SeekBar_shadowOffsetX,0);
+        int shadowOffsetY=ta.getDimensionPixelOffset(R.styleable.SeekBar_shadowOffsetY,0);
+        mLesserThumb.setShadow(shadowRaidus,shadowOffsetX,shadowOffsetY,shadowColor);
+        mLargerThumb.setShadow(shadowRaidus,shadowOffsetX,shadowOffsetY,shadowColor);
+
         ta.recycle();
 
         mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+
         initPaint();
     }
 
@@ -134,9 +144,10 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mCenterY = getHeight() / 2;
         mLineWidth = getWidth() - getPaddingLeft() - getPaddingRight() - mLesserThumb.getWidth();
-        mLine = new RectF(mLesserThumb.getWidth() / 2, mCenterY - mLineHeight / 2, getWidth() - mLesserThumb.getWidth() / 2, mCenterY + mLineHeight / 2);
-        mLesserThumb.setRect((int) mLine.left - mLesserThumb.getWidth() / 2, mCenterY - mLesserThumb.getHeight() / 2, (int) mLine.right - mLesserThumb.getWidth() - mLargerThumb.getWidth() / 2, mCenterY + mLesserThumb.getHeight() / 2);
-        mLargerThumb.setRect((int) mLine.left + mLesserThumb.getWidth() / 2, mCenterY - mLargerThumb.getHeight() / 2, (int) mLine.right - mLargerThumb.getWidth() / 2, mCenterY + mLargerThumb.getHeight() / 2);
+        mProgressLine = new RectF(mLesserThumb.getWidth() / 2, mCenterY - mProgressHeight / 2, getWidth() - mLesserThumb.getWidth() / 2, mCenterY + mProgressHeight / 2);
+
+        mLesserThumb.setRect((int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth() / 2, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - mLesserThumb.getThumbDrawable().getIntrinsicWidth() - mLargerThumb.getThumbDrawable().getIntrinsicWidth() / 2, mCenterY + mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2);
+        mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight()/ 2, (int) mProgressLine.right - mLargerThumb.getThumbDrawable().getIntrinsicWidth() / 2, mCenterY + mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2);
 
     }
 
@@ -144,18 +155,19 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
     @Override
     protected void onDraw(Canvas canvas) {
         mPaint.setColor(mProgressBackground);
-        // draw line
-        canvas.drawRoundRect(mLine, DEFAULT_RADIUS_RATE * mLineHeight, DEFAULT_RADIUS_RATE * mLineHeight, mPaint);
+        // draw progressBackground
+        canvas.drawRoundRect(mProgressLine, DEFAULT_RADIUS_RATE * mProgressHeight, DEFAULT_RADIUS_RATE * mProgressHeight, mPaint);
 
         //draw progress
         mPaint.setColor(mProgressColor);
-        canvas.drawRect(mLesserThumb.getCenterPoint().x, mLine.top, mLargerThumb.getCenterPoint().x, mLine.bottom, mPaint);
+        canvas.drawRect(mLesserThumb.getCenterPoint().x, mProgressLine.top, mLargerThumb.getCenterPoint().x, mProgressLine.bottom, mPaint);
 
         // draw thumb
         mLesserThumb.draw(canvas);
         mLargerThumb.draw(canvas);
 
     }
+
 
 
     public void setOnSeekBarChangeListener(OnSeekBarChangeListener listener) {
@@ -176,6 +188,7 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
         mLesserThumb.setProgress(lesserProgress);
         mLargerThumb.setProgress(largerProgress);
     }
+
 
 
     @Override
@@ -223,9 +236,6 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
     }
 
 
-    public interface OnSeekBarChangeListener {
-        void onProgressChanged(SeekBar seekBar, float lesserProgress, float largerProgress, boolean fromUser);
-    }
 
 
     private float dp2px(float value) {
@@ -262,5 +272,9 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
         }
     }
 
+
+    public interface OnSeekBarChangeListener {
+        void onProgressChanged(SeekBar seekBar, float lesserProgress, float largerProgress, boolean fromUser);
+    }
 
 }
