@@ -18,7 +18,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginStart="10dp"
         app:cellMode="number"
-        app:cells="5"
         app:hintBGHeight="0dp"
         app:lineColorEdge="#E9E9E9"
         app:lineColorSelected="@color/colorAccent"
@@ -30,6 +29,11 @@
         app:thumbResId="@drawable/ic_thumb"
         app:thumbSize="17dp" />
 
+    <TextView
+        android:id="@+id/tv_rag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 
     <com.pngfi.seekbar.SeekBar
         android:id="@+id/seekbar"
@@ -38,6 +42,7 @@
         android:layout_marginTop="50dp"
         app:max="100"
         app:min="0"
+        app:stepCount="5"
         app:progressBackground="#E9E9E9"
         app:shadowColor="#19000000"
         app:shadowOffsetX="0dp"

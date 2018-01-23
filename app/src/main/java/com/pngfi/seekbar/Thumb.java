@@ -14,16 +14,19 @@ public class Thumb {
     //the x of drawable left edge when the progress is min
     private int left;
     //the x of drawable left edge when the progress is max
-    private int right;
-
     private int top;
-    private int bottom;
+
 
     private float min;
     private float max;
 
+
+    private float centerX;
+    private float centerY;
+
+
     private Drawable thumbDrawable;
-    private Float progress;
+
 
     /**
      * the real slide width of thumb
@@ -31,10 +34,11 @@ public class Thumb {
      */
     private int progressWidth;
 
-    private OnProgressChangeListener onProgressChangeListener;
+    //the count of steps
+    private int stepCount;
 
-
-    private Context context;
+    //the value of per step
+    private float step = 1;
 
 
     private Paint shadowPaint;
@@ -44,12 +48,19 @@ public class Thumb {
     @ColorInt
     private int shadowColor;
 
+    private int currentStep = 0;
+
+
+    private OnProgressChangeListener onProgressChangeListener;
+
+
+    private Context context;
+
 
     public Thumb(Context context, Drawable drawable, float min, float max) {
         this.thumbDrawable = drawable;
         this.min = min;
         this.max = max;
-        progress = min;
         this.context = context;
 
         shadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -59,20 +70,17 @@ public class Thumb {
 
 
     public void setShadow(int shadowRadius, int shadowOffsetX, int shadowOffsetY, int shadowColor) {
-        this.shadowColor=shadowColor;
-        this.shadowOffsetX=shadowOffsetX;
-        this.shadowOffsetY=shadowOffsetY;
-        this.shadowRadius=shadowRadius;
+        this.shadowColor = shadowColor;
+        this.shadowOffsetX = shadowOffsetX;
+        this.shadowOffsetY = shadowOffsetY;
+        this.shadowRadius = shadowRadius;
     }
 
 
-    public void setRect(int left, int top, int right, int bottom) {
+    public void setRect(int left, int top, int progressWidth) {
         this.left = left;
         this.top = top;
-        this.right = right;
-        this.bottom = bottom;
-        progressWidth = right - left;
-
+        this.progressWidth = progressWidth;
     }
 
 
@@ -80,12 +88,11 @@ public class Thumb {
         if (progress < min || progress > max) {
             throw new IllegalArgumentException("progress must be between min and max ");
         }
-        if (!this.progress.equals(progress)) {
-            this.progress = progress;
-            if (onProgressChangeListener != null)
-                onProgressChangeListener.onProgressChanged(this, progress, false);
-        }
+        int cStep = (int) ((progress - min) / step);
+        setCurrentStep(cStep,false);
     }
+
+
 
 
     public boolean contains(float x, float y) {
@@ -95,24 +102,64 @@ public class Thumb {
     }
 
 
-    public void onSlide(Float dx, Float dy) {
-        if (dy.equals(0f)) {
-            progress = progress + dx / progressWidth * (max - min);
+
+
+    public void setCurrentStep(int step,boolean fromUser) {
+        if (step < 0 || step > stepCount) {
+            throw new IllegalArgumentException("step must be between 0 and stepCount ");
+        }
+        currentStep=step;
+        if (onProgressChangeListener!=null){
+            onProgressChangeListener.onProgressChanged(this,min+step*currentStep,fromUser);
+        }
+    }
+
+
+    public int getCurrentStep() {
+        return currentStep;
+    }
+
+
+    public int calculateStep(Float eventX, Float eventY) {
+        float progress = calculateProgress(eventX, eventY);
+        return (int) (progress / step);
+    }
+
+
+    public float calculateProgress(Float eventX, Float eventY) {
+        float progress = 0f;
+        if (eventY.equals(0f)) {
+            Float offset = (eventX - left - thumbDrawable.getIntrinsicWidth() / 2) / progressWidth * (max - min);
+            float mod = offset % step;
+            if (Math.abs(mod) > step / 2) {
+                offset = offset - mod + step;
+            } else {
+                offset = offset - mod;
+            }
+            progress = min + offset;
             if (progress > max) {
                 progress = max;
             } else if (progress < min) {
                 progress = min;
             }
-            if (onProgressChangeListener != null)
-                onProgressChangeListener.onProgressChanged(this, progress, true);
-        } else {
+        }
+        return progress;
+    }
 
+
+    public void setStepCount(int stepCount) {
+        if (stepCount == 0) {
+            this.stepCount = (int) (max - min);
+            step = 1;
+        } else {
+            this.stepCount = stepCount;
+            step = (max - min) / stepCount;
         }
     }
 
 
     public float getProgress() {
-        return progress;
+        return min + step * currentStep;
     }
 
 
@@ -146,9 +193,10 @@ public class Thumb {
 
 
     public void draw(Canvas canvas) {
-        float percent = (progress - min) / (max - min);
+        float percent = (currentStep * 1f) / stepCount;
         thumbDrawable.setBounds((int) (left + percent * progressWidth), top, (int) (left + percent * progressWidth + thumbDrawable.getIntrinsicWidth()), top + thumbDrawable.getIntrinsicHeight());
 
+        //draw shadow
         shadowPaint.setShadowLayer(shadowRadius, shadowOffsetX, shadowOffsetY, shadowColor);
         canvas.drawOval(new RectF(thumbDrawable.getBounds()), shadowPaint);
 

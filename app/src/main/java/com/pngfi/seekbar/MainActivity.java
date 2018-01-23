@@ -18,5 +18,14 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(lesserProgress+"--"+largerProgress);
             }
         });
+
+       RangeSeekBar range= (RangeSeekBar) findViewById(R.id.seekBar);
+        range.setOnRangeChangedListener(new RangeSeekBar.OnRangeChangedListener() {
+            @Override
+            public void onRangeChanged(RangeSeekBar view, float min, float max, boolean isFromUser) {
+                textView.setText(min+"--"+max);
+            }
+        });
+
     }
 }
