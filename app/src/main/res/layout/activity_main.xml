@@ -39,7 +39,7 @@
         android:id="@+id/seekbar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:layout_gravity="center"
         app:max="100"
         app:min="0"
@@ -49,11 +49,19 @@
         app:shadowColor="#19000000"
         app:shadowOffsetX="0dp"
         app:shadowOffsetY="2dp"
-        app:shadowRadius="5dp"></com.pngfi.seekbar.SeekBar>
+        app:shadowRadius="5dp"/>
 
 
     <TextView
         android:id="@+id/tv_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+    <Button
+        android:id="@+id/btr_change"
+        android:text="该边"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

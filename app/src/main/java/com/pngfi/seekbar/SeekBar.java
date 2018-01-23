@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -23,6 +23,9 @@ import android.view.ViewConfiguration;
  */
 
 public class SeekBar extends View implements Thumb.OnProgressChangeListener {
+
+
+    private static final String TAG="SeekBar";
 
 
     private static final int DEFAULT_LINE_HEIGHT = 5; //dp
@@ -140,6 +143,7 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
             heightSize = thumbHeight;
         }
         setMeasuredDimension(widthSize, heightSize);
+
     }
 
 
@@ -150,7 +154,6 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
 
         mLesserThumb.setRect((int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth() / 2, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
         mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
-
     }
 
 
@@ -167,7 +170,7 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
         // draw thumb
         mLesserThumb.draw(canvas);
         mLargerThumb.draw(canvas);
-
+        Log.i(TAG,"onDraw");
     }
 
 
@@ -188,6 +191,7 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
         }
         mLesserThumb.setProgress(lesserProgress);
         mLargerThumb.setProgress(largerProgress);
+        invalidate();
     }
 
 
@@ -235,35 +239,12 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
             case MotionEvent.ACTION_CANCEL:
                 break;
         }
-
         return true;
     }
 
 
     private float dp2px(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
-    }
-
-
-    private static final String SUPER_STATE = "super_state";
-
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        Parcelable parcel = super.onSaveInstanceState();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(SUPER_STATE, parcel);
-        return bundle;
-
-    }
-
-
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        Bundle bundle = (Bundle) state;
-        Parcelable superState = bundle.getParcelable(SUPER_STATE);
-
-        super.onRestoreInstanceState(superState);
-
     }
 
 
@@ -277,6 +258,53 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
 
     public interface OnSeekBarChangeListener {
         void onProgressChanged(SeekBar seekBar, float lesserProgress, float largerProgress, boolean fromUser);
+    }
+
+
+
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        RangeSeekBarState state = new RangeSeekBarState(super.onSaveInstanceState());
+        state.lesserStep=mLesserThumb.getCurrentStep();
+        state.largerStep=mLargerThumb.getCurrentStep();
+        return state;
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        RangeSeekBarState rs = (RangeSeekBarState) state;
+        super.onRestoreInstanceState(((RangeSeekBarState) state).getSuperState());
+        mLesserThumb.setCurrentStep(rs.lesserStep, false);
+        mLargerThumb.setCurrentStep(rs.largerStep, false);
+    }
+
+
+
+
+    private class RangeSeekBarState extends BaseSavedState {
+        private int lesserStep;
+        private int largerStep;
+
+        public RangeSeekBarState(Parcelable superState) {
+            super(superState);
+        }
+
+        public RangeSeekBarState(Parcel source) {
+            super(source);
+            lesserStep = source.readInt();
+            largerStep = source.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(lesserStep);
+            out.writeInt(largerStep);
+        }
+
+
     }
 
 }

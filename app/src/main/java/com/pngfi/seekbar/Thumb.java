@@ -45,6 +45,8 @@ public class Thumb {
     @ColorInt
     private int shadowColor;
 
+
+
     private int currentStep = 0;
 
 
@@ -80,6 +82,8 @@ public class Thumb {
         this.left = left;
         this.top = top;
         this.progressWidth = progressWidth;
+
+        refreshThumbLocation();
     }
 
 
@@ -105,11 +109,17 @@ public class Thumb {
         if (cStep > stepCount)
             cStep = stepCount;
         currentStep = cStep;
+        refreshThumbLocation();
         if (onProgressChangeListener != null) {
             onProgressChangeListener.onProgressChanged(this, min + stepProgress * currentStep, fromUser);
         }
     }
 
+
+    private void refreshThumbLocation(){
+        float percent = (currentStep * 1f) / stepCount;
+        thumbDrawable.setBounds((int) (left + percent * progressWidth), top, (int) (left + percent * progressWidth + thumbDrawable.getIntrinsicWidth()), top + thumbDrawable.getIntrinsicHeight());
+    }
 
 
 
@@ -181,8 +191,6 @@ public class Thumb {
 
 
     public void draw(Canvas canvas) {
-        float percent = (currentStep * 1f) / stepCount;
-        thumbDrawable.setBounds((int) (left + percent * progressWidth), top, (int) (left + percent * progressWidth + thumbDrawable.getIntrinsicWidth()), top + thumbDrawable.getIntrinsicHeight());
 
         //draw shadow
         shadowPaint.setShadowLayer(shadowRadius, shadowOffsetX, shadowOffsetY, shadowColor);
