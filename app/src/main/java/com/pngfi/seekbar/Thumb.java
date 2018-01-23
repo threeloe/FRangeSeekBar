@@ -21,10 +21,6 @@ public class Thumb {
     private float max;
 
 
-    private float centerX;
-    private float centerY;
-
-
     private Drawable thumbDrawable;
 
 
@@ -37,8 +33,9 @@ public class Thumb {
     //the count of steps
     private int stepCount;
 
-    //the value of per step
-    private float step = 1;
+    //the progress value of per stepProgress
+    private float stepProgress = 1;
+
 
 
     private Paint shadowPaint;
@@ -49,6 +46,8 @@ public class Thumb {
     private int shadowColor;
 
     private int currentStep = 0;
+
+
 
 
     private OnProgressChangeListener onProgressChangeListener;
@@ -88,11 +87,9 @@ public class Thumb {
         if (progress < min || progress > max) {
             throw new IllegalArgumentException("progress must be between min and max ");
         }
-        int cStep = (int) ((progress - min) / step);
-        setCurrentStep(cStep,false);
+        int cStep = (int) ((progress - min) / stepProgress);
+        setCurrentStep(cStep, false);
     }
-
-
 
 
     public boolean contains(float x, float y) {
@@ -102,17 +99,18 @@ public class Thumb {
     }
 
 
-
-
-    public void setCurrentStep(int step,boolean fromUser) {
-        if (step < 0 || step > stepCount) {
-            throw new IllegalArgumentException("step must be between 0 and stepCount ");
-        }
-        currentStep=step;
-        if (onProgressChangeListener!=null){
-            onProgressChangeListener.onProgressChanged(this,min+step*currentStep,fromUser);
+    public void setCurrentStep(int cStep, boolean fromUser) {
+        if (cStep < 0)
+            cStep = 0;
+        if (cStep > stepCount)
+            cStep = stepCount;
+        currentStep = cStep;
+        if (onProgressChangeListener != null) {
+            onProgressChangeListener.onProgressChanged(this, min + stepProgress * currentStep, fromUser);
         }
     }
+
+
 
 
     public int getCurrentStep() {
@@ -121,45 +119,35 @@ public class Thumb {
 
 
     public int calculateStep(Float eventX, Float eventY) {
-        float progress = calculateProgress(eventX, eventY);
-        return (int) (progress / step);
-    }
-
-
-    public float calculateProgress(Float eventX, Float eventY) {
-        float progress = 0f;
+        if (eventX < left || eventX > left + progressWidth) {
+            return currentStep;
+        }
+        int cStep = 0;
         if (eventY.equals(0f)) {
             Float offset = (eventX - left - thumbDrawable.getIntrinsicWidth() / 2) / progressWidth * (max - min);
-            float mod = offset % step;
-            if (Math.abs(mod) > step / 2) {
-                offset = offset - mod + step;
-            } else {
-                offset = offset - mod;
-            }
-            progress = min + offset;
-            if (progress > max) {
-                progress = max;
-            } else if (progress < min) {
-                progress = min;
+            float mod = offset % stepProgress;
+            cStep = (int) (offset / stepProgress);
+            if (Math.abs(mod) > stepProgress / 2) {
+                cStep++;
             }
         }
-        return progress;
+        return cStep;
     }
 
 
     public void setStepCount(int stepCount) {
         if (stepCount == 0) {
             this.stepCount = (int) (max - min);
-            step = 1;
+            stepProgress = 1;
         } else {
             this.stepCount = stepCount;
-            step = (max - min) / stepCount;
+            stepProgress = (max - min) / stepCount;
         }
     }
 
 
     public float getProgress() {
-        return min + step * currentStep;
+        return min + stepProgress * currentStep;
     }
 
 

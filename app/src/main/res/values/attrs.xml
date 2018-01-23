@@ -58,11 +58,12 @@
 
         <attr name="thumb" format="reference" />
         <attr name="stepCount" format="integer" />
+        <attr name="gap" format="integer"/>
+
         <attr name="shadowRadius" format="dimension" />
         <attr name="shadowOffsetX" format="dimension" />
         <attr name="shadowOffsetY" format="dimension" />
         <attr name="shadowColor" format="color" />
-
 
     </declare-styleable>
 

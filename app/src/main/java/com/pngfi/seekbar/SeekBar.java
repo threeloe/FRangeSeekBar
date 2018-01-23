@@ -12,6 +12,7 @@ import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,9 +44,9 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
 
     //the height of line
     private float mProgressHeight;
-    //the width of line
-    private float mLineWidth;
 
+    //the num of step between lesserThumb and largerThumb
+    private int gap;
 
     @ColorInt
     private int mProgressBackground;
@@ -104,12 +105,12 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
         mLesserThumb.setShadow(shadowRaidus, shadowOffsetX, shadowOffsetY, shadowColor);
         mLargerThumb.setShadow(shadowRaidus, shadowOffsetX, shadowOffsetY, shadowColor);
 
-        int sectionCount = ta.getInt(R.styleable.SeekBar_stepCount, 0);
-        mLesserThumb.setStepCount(sectionCount);
-        mLargerThumb.setStepCount(sectionCount);
+        int stepCount = ta.getInt(R.styleable.SeekBar_stepCount, 0);
+        mLesserThumb.setStepCount(stepCount);
+        mLargerThumb.setStepCount(stepCount);
 
+        gap = ta.getInt(R.styleable.SeekBar_gap, 0);
         ta.recycle();
-
         mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
@@ -145,7 +146,6 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mCenterY = getHeight() / 2;
-        mLineWidth = getWidth() - getPaddingLeft() - getPaddingRight() - mLesserThumb.getWidth();
         mProgressLine = new RectF(mLesserThumb.getWidth() / 2, mCenterY - mProgressHeight / 2, getWidth() - mLesserThumb.getWidth() / 2, mCenterY + mProgressHeight / 2);
 
         mLesserThumb.setRect((int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth() / 2, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
@@ -211,19 +211,19 @@ public class SeekBar extends View implements Thumb.OnProgressChangeListener {
                 mLastX = event.getX();
                 if (mSlidingThumb == mLesserThumb) {
                     int lessStep = mLesserThumb.calculateStep(event.getX(), 0f);
-                    if (lessStep > mLargerThumb.getCurrentStep() && dx > 0) {
+                    if (lessStep > mLargerThumb.getCurrentStep() - gap && dx > 0) {
                         mSlidingThumb = mLargerThumb;
                     } else {
-                        if (lessStep <= mLargerThumb.getCurrentStep()) {
+                        if (lessStep <= mLargerThumb.getCurrentStep() - gap) {
                             mSlidingThumb.setCurrentStep(lessStep, true);
                         }
                     }
                 } else {
                     int largerStep = mLargerThumb.calculateStep(event.getX(), 0f);
-                    if (largerStep < mLesserThumb.getCurrentStep() && dx < 0) {
+                    if (largerStep < mLesserThumb.getCurrentStep() + gap && dx < 0) {
                         mSlidingThumb = mLesserThumb;
                     } else {
-                        if (largerStep >= mLesserThumb.getCurrentStep())
+                        if (largerStep >= mLesserThumb.getCurrentStep() + gap)
                             mSlidingThumb.setCurrentStep(largerStep, true);
                     }
                 }
