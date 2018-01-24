@@ -122,7 +122,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         int stepCount = ta.getInt(R.styleable.RangeSeekBar_stepCount, 0);
         mLesserThumb.setStepCount(stepCount);
         mLargerThumb.setStepCount(stepCount);
-        mSeekToTouch = ta.getBoolean(R.styleable.RangeSeekBar_seekToTouch, false);
+        mSeekToTouch = ta.getBoolean(R.styleable.RangeSeekBar_seekToTouch, true);
         mGap = ta.getInt(R.styleable.RangeSeekBar_gap, 0);
         ta.recycle();
         mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();

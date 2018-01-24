@@ -24,6 +24,7 @@
         app:max="100"
         app:min="-100"
         app:gap="0"
+        app:seekToTouch="true"
         app:stepCount="100"
         app:progressBackground="#E9E9E9"
         app:progressColor="@color/colorAccent"
