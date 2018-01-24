@@ -4,9 +4,11 @@
     <declare-styleable name="RangeSeekBar">
         <attr name="max" format="float" />
         <attr name="min" format="float" />
-        <attr name="progressHeight" format="dimension" />
         <attr name="progressBackground" format="color" />
+        <attr name="progressBackgroundHeight" format="dimension"/>
+
         <attr name="progressColor" format="color" />
+        <attr name="progressHeight" format="dimension" />
 
         <attr name="orientation" format="enum">
             <enum name="horizontal" value="0" />
