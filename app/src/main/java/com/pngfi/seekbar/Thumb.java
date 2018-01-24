@@ -37,7 +37,6 @@ public class Thumb {
     private float stepProgress = 1;
 
 
-
     private Paint shadowPaint;
     private int shadowRadius;
     private int shadowOffsetX;
@@ -46,10 +45,7 @@ public class Thumb {
     private int shadowColor;
 
 
-
     private int currentStep = 0;
-
-
 
 
     private OnProgressChangeListener onProgressChangeListener;
@@ -116,11 +112,10 @@ public class Thumb {
     }
 
 
-    private void refreshThumbLocation(){
+    private void refreshThumbLocation() {
         float percent = (currentStep * 1f) / stepCount;
         thumbDrawable.setBounds((int) (left + percent * progressWidth), top, (int) (left + percent * progressWidth + thumbDrawable.getIntrinsicWidth()), top + thumbDrawable.getIntrinsicHeight());
     }
-
 
 
     public int getCurrentStep() {
@@ -128,12 +123,15 @@ public class Thumb {
     }
 
 
-    public int calculateStep(Float eventX, Float eventY) {
-        if (eventX < left || eventX > left + progressWidth) {
-            return currentStep;
+    public int calculateStep(float eventX, float eventY) {
+        if (eventX < left + thumbDrawable.getIntrinsicWidth() / 2) {
+            eventX = left + thumbDrawable.getIntrinsicWidth() / 2;
+        }
+        if (eventX > left + progressWidth + thumbDrawable.getIntrinsicWidth() / 2) {
+            eventX=left + progressWidth + thumbDrawable.getIntrinsicWidth() / 2;
         }
         int cStep = 0;
-        if (eventY.equals(0f)) {
+        if (Float.valueOf(0f).equals(eventY)) {
             Float offset = (eventX - left - thumbDrawable.getIntrinsicWidth() / 2) / progressWidth * (max - min);
             float mod = offset % stepProgress;
             cStep = (int) (offset / stepProgress);

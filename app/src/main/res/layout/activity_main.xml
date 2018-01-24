@@ -8,26 +8,6 @@
     android:padding="12dp"
     tools:context="com.pngfi.seekbar.MainActivity">
 
-    <com.pngfi.seekbar.RangeSeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginStart="10dp"
-        app:cellMode="number"
-        app:hintBGHeight="0dp"
-        app:lineColorEdge="#E9E9E9"
-        app:lineColorSelected="@color/colorAccent"
-        app:max="20000"
-        app:min="0"
-        app:progressHintMode="alwaysHide"
-        app:seekBarHeight="6dp"
-        app:seekBarMode="range"
-        app:thumbResId="@drawable/ic_thumb"
-        app:thumbSize="17dp" />
 
     <TextView
         android:id="@+id/tv_rag"
@@ -35,16 +15,16 @@
         android:layout_height="wrap_content" />
 
 
-    <com.pngfi.seekbar.SeekBar
+    <com.pngfi.seekbar.RangeSeekBar
         android:id="@+id/seekbar"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="100dp"
         android:layout_marginTop="100dp"
         android:layout_gravity="center"
         app:max="100"
-        app:min="0"
-        app:gap="2"
-        app:stepCount="10"
+        app:min="-100"
+        app:gap="0"
+        app:stepCount="100"
         app:progressBackground="#E9E9E9"
         app:shadowColor="#19000000"
         app:shadowOffsetX="0dp"
