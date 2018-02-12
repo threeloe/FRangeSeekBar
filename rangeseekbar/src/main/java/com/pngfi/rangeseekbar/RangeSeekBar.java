@@ -28,6 +28,8 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
     private static final int DEFAULT_LINE_HEIGHT = 5; //dp
 
+    private static final int SLIDING_MODE_CONTINUOUS=0;
+    private static final int SLIDING_MODE_DISCRETE=1;
 
     //the lesser thumb
     private Thumb mLesserThumb;
@@ -71,9 +73,9 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     //the thumb will move to the touch location if true
     private boolean mSeekToTouch;
 
+    private int mSlidingMode;
 
     private float mTouchDownX;
-    private float mLastTouchX;
 
     private boolean mIsDragging;
 
@@ -116,6 +118,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         mLargerThumb.setStepCount(stepCount);
         mSeekToTouch = ta.getBoolean(R.styleable.RangeSeekBar_seekToTouch, true);
         mGap = ta.getInt(R.styleable.RangeSeekBar_gap, 0);
+        mSlidingMode=ta.getInt(R.styleable.RangeSeekBar_slidingMode,SLIDING_MODE_CONTINUOUS);
         ta.recycle();
         mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -203,7 +206,6 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mTouchDownX = event.getX();
-                mLastTouchX = mTouchDownX;
                 if (mLesserThumb.contains(event.getX(), event.getY())) {
                     mIsDragging = true;
                     mSlidingThumb = mLesserThumb;
@@ -215,21 +217,19 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                 }
             case MotionEvent.ACTION_MOVE:
                 if (mIsDragging) {
-                    float dx = event.getX() - mLastTouchX;
-                    mLastTouchX = event.getX();
                     if (mSlidingThumb == mLesserThumb) {
                         int lessStep = mLesserThumb.calculateStep(event.getX(), 0f);
                         if (lessStep > mLargerThumb.getCurrentStep() - mGap) {
                             mSlidingThumb = mLargerThumb;
                         } else {
-                            mSlidingThumb.setCurrentStep(lessStep, true);
+                            mSlidingThumb.setCurrentStep(lessStep, true,false);
                         }
                     } else {
                         int largerStep = mLargerThumb.calculateStep(event.getX(), 0f);
                         if (largerStep < mLesserThumb.getCurrentStep() + mGap) {
                             mSlidingThumb = mLesserThumb;
                         } else {
-                            mSlidingThumb.setCurrentStep(largerStep, true);
+                            mSlidingThumb.setCurrentStep(largerStep, true,false);
                         }
                     }
                     invalidate();
@@ -254,11 +254,11 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         if (lesserDistance < largerDistance) {
             int lessStep = mLesserThumb.calculateStep(touchUpX, 0f);
             lessStep = Math.min(lessStep, mLargerThumb.getCurrentStep() - mGap);
-            mLesserThumb.setCurrentStep(lessStep, true);
+            mLesserThumb.setCurrentStep(lessStep, true,true);
         } else {
             int largerStep = mLargerThumb.calculateStep(touchUpX, 0f);
             largerStep = Math.max(largerStep, mLesserThumb.getCurrentStep() + mGap);
-            mLargerThumb.setCurrentStep(largerStep, true);
+            mLargerThumb.setCurrentStep(largerStep, true,true);
         }
         invalidate();
     }
@@ -294,8 +294,8 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     protected void onRestoreInstanceState(Parcelable state) {
         RangeSeekBarState rs = (RangeSeekBarState) state;
         super.onRestoreInstanceState(((RangeSeekBarState) state).getSuperState());
-        mLesserThumb.setCurrentStep(rs.lesserStep, false);
-        mLargerThumb.setCurrentStep(rs.largerStep, false);
+        mLesserThumb.setCurrentStep(rs.lesserStep, false,false);
+        mLargerThumb.setCurrentStep(rs.largerStep, false,false);
     }
 
 

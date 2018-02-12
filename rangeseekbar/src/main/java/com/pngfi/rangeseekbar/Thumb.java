@@ -81,7 +81,7 @@ public class Thumb {
         this.top = top;
         this.progressWidth = progressWidth;
 
-        refreshLocation();
+        refreshCenterPoint();
     }
 
 
@@ -92,7 +92,7 @@ public class Thumb {
         int cStep = (int) ((progress - min) / stepProgress);
         if ((progress - cStep * stepProgress) >= stepProgress / 2)
             cStep++;
-        setCurrentStep(cStep, false);
+        setCurrentStep(cStep, false,true);
     }
 
 
@@ -103,7 +103,7 @@ public class Thumb {
     }
 
 
-    public void setCurrentStep(int cStep, boolean fromUser) {
+    public void setCurrentStep(int cStep, boolean fromUser,boolean anim) {
         if (cStep == currentStep)
             return;
         if (cStep < 0)
@@ -111,14 +111,14 @@ public class Thumb {
         if (cStep > stepCount)
             cStep = stepCount;
         currentStep = cStep;
-        refreshLocation();
+        refreshCenterPoint();
         if (onProgressChangeListener != null) {
             onProgressChangeListener.onProgressChanged(this, min + stepProgress * currentStep, fromUser);
         }
     }
 
 
-    private void refreshLocation() {
+    private void refreshCenterPoint() {
         float percent = (currentStep * 1f) / stepCount;
         float centerX = left + percent * progressWidth;
         setCenterPoint(centerX);

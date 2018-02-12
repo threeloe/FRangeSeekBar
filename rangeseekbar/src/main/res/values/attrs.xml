@@ -25,7 +25,10 @@
         <attr name="shadowColor" format="color" />
 
         <attr name="seekToTouch" format="boolean"/>
-
+        <attr name="slidingMode" format="enum">
+            <enum name="continuous" value="0"/>
+            <enum name="discrete" value="1"/>
+        </attr>
     </declare-styleable>
 
 </resources>
