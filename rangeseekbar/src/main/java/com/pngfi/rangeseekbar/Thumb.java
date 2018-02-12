@@ -11,10 +11,12 @@ import android.graphics.drawable.Drawable;
 
 public class Thumb {
 
-    //the x of drawable left edge when the progress is min
+    //the x of drawable center when the progress is min
     private int left;
-    //the x of drawable left edge when the progress is max
     private int top;
+
+
+    private PointF centerPoint = new PointF();
 
 
     private float min;
@@ -88,7 +90,7 @@ public class Thumb {
             throw new IllegalArgumentException("progress must be between min and max ");
         }
         int cStep = (int) ((progress - min) / stepProgress);
-        if ((progress-cStep*stepProgress)>= stepProgress / 2)
+        if ((progress - cStep * stepProgress) >= stepProgress / 2)
             cStep++;
         setCurrentStep(cStep, false);
     }
@@ -102,7 +104,7 @@ public class Thumb {
 
 
     public void setCurrentStep(int cStep, boolean fromUser) {
-        if (cStep==currentStep)
+        if (cStep == currentStep)
             return;
         if (cStep < 0)
             cStep = 0;
@@ -118,26 +120,37 @@ public class Thumb {
 
     private void refreshLocation() {
         float percent = (currentStep * 1f) / stepCount;
-        thumbDrawable.setBounds((int) (left + percent * progressWidth), top, (int) (left + percent * progressWidth + thumbDrawable.getIntrinsicWidth()), top + thumbDrawable.getIntrinsicHeight());
+        float centerX = left + percent * progressWidth;
+        setCenterPoint(centerX);
     }
 
 
-    
+    public void setCenterPoint(float centerX) {
+        centerPoint.x = centerX;
+        centerPoint.y = (top + top + thumbDrawable.getIntrinsicHeight()) / 2;
+        setThumbBounds(centerX);
+    }
+
+    private void setThumbBounds(float centerX) {
+        thumbDrawable.setBounds((int) centerX - thumbDrawable.getIntrinsicWidth() / 2, top, (int) centerX + thumbDrawable.getIntrinsicWidth() / 2, top + thumbDrawable.getIntrinsicHeight());
+    }
+
+
     public int getCurrentStep() {
         return currentStep;
     }
 
 
     public int calculateStep(float eventX, float eventY) {
-        if (eventX < left + thumbDrawable.getIntrinsicWidth() / 2) {
-            eventX = left + thumbDrawable.getIntrinsicWidth() / 2;
+        if (eventX < left ) {
+            eventX = left ;
         }
-        if (eventX > left + progressWidth + thumbDrawable.getIntrinsicWidth() / 2) {
-            eventX = left + progressWidth + thumbDrawable.getIntrinsicWidth() / 2;
+        if (eventX > left + progressWidth ) {
+            eventX = left + progressWidth ;
         }
         int cStep = 0;
         if (Float.valueOf(0f).equals(eventY)) {
-            Float offset = (eventX - left - thumbDrawable.getIntrinsicWidth() / 2) / progressWidth * (max - min);
+            Float offset = (eventX - left ) / progressWidth * (max - min);
             float mod = offset % stepProgress;
             cStep = (int) (offset / stepProgress);
             if (Math.abs(mod) > stepProgress / 2) {
@@ -163,7 +176,6 @@ public class Thumb {
         return min + stepProgress * currentStep;
     }
 
-
     /**
      * @return the height the contains the shadow
      */
@@ -186,10 +198,7 @@ public class Thumb {
 
 
     public PointF getCenterPoint() {
-        PointF point = new PointF();
-        point.x = thumbDrawable.getBounds().left + thumbDrawable.getIntrinsicWidth() / 2;
-        point.y = thumbDrawable.getBounds().top + thumbDrawable.getIntrinsicHeight() / 2;
-        return point;
+        return centerPoint;
     }
 
 
