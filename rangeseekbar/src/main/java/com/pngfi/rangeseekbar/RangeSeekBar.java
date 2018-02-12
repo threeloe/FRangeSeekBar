@@ -1,4 +1,4 @@
-package com.pngfi.seekbar;
+package com.pngfi.rangeseekbar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,13 +9,13 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+
+
 
 /**
  * Created by pngfi on 2018/1/6.
@@ -30,11 +30,6 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     private static final int DEFAULT_LINE_HEIGHT = 5; //dp
 
 
-    private int mOrientation;
-
-    //the orientation value
-    public static final int HORIZONTAL = 0;
-    public static final int VERTICAL = 1;
 
 
     //the lesser thumb
@@ -54,9 +49,9 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     //the num of step between lesserThumb and largerThumb
     private int mGap;
 
-    @ColorInt
+
     private int mProgressBackground;
-    @ColorInt
+
     private int mProgressColor;
 
     private int mScaledTouchSlop;
@@ -90,11 +85,11 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         this(context, null);
     }
 
-    public RangeSeekBar(Context context, @Nullable AttributeSet attrs) {
+    public RangeSeekBar(Context context,  AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RangeSeekBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public RangeSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, defStyleAttr, 0);
         mProgressHeight = ta.getDimension(R.styleable.RangeSeekBar_progressHeight, dp2px(DEFAULT_LINE_HEIGHT));

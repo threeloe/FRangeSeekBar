@@ -1,4 +1,4 @@
-package com.pngfi.seekbar;
+package com.pngfi.rangeseekbar;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
+
 
 public class Thumb {
 
@@ -41,7 +41,7 @@ public class Thumb {
     private int shadowRadius;
     private int shadowOffsetX;
     private int shadowOffsetY;
-    @ColorInt
+
     private int shadowColor;
 
 

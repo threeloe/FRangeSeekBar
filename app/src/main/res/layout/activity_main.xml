@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="12dp"
-    tools:context="com.pngfi.seekbar.MainActivity">
+    tools:context="com.pngfi.demo.MainActivity">
 
 
     <TextView
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content" />
 
 
-    <com.pngfi.seekbar.RangeSeekBar
+    <com.pngfi.rangeseekbar.RangeSeekBar
         android:id="@+id/seekbar"
         android:layout_width="300dp"
         android:layout_height="100dp"
@@ -25,7 +25,7 @@
         app:min="-100"
         app:gap="0"
         app:seekToTouch="true"
-        app:stepCount="100"
+        app:stepCount="15"
         app:progressBackground="#E9E9E9"
         app:progressColor="@color/colorAccent"
         app:progressHeight="5dp"

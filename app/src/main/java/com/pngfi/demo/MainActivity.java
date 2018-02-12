@@ -1,9 +1,11 @@
-package com.pngfi.seekbar;
+package com.pngfi.demo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.pngfi.rangeseekbar.RangeSeekBar;
 
 public class MainActivity extends AppCompatActivity {
 
