@@ -155,8 +155,8 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        mCenterY = getHeight() / 2;
-        mProgressLine = new RectF(mLesserThumb.getWidth() / 2, mCenterY - mProgressBackgroundHeight / 2, getWidth() - mLesserThumb.getWidth() / 2, mCenterY + mProgressBackgroundHeight / 2);
+        mCenterY = (getPaddingTop()+(getHeight()-getPaddingBottom())) / 2;
+        mProgressLine = new RectF(mLesserThumb.getWidth() / 2-getPaddingLeft(), mCenterY - mProgressBackgroundHeight / 2, getWidth() - mLesserThumb.getWidth() / 2-getPaddingRight(), mCenterY + mProgressBackgroundHeight / 2);
 
         mLesserThumb.setRect((int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth() / 2, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
         mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());

@@ -5,35 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp"
     tools:context="com.pngfi.demo.MainActivity">
-
-
-    <TextView
-        android:id="@+id/tv_rag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
     <com.pngfi.rangeseekbar.RangeSeekBar
         android:id="@+id/seekbar"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="100dp"
-        android:layout_gravity="center"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="40dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="40dp"
+        android:paddingTop="20dp"
+        app:gap="0"
         app:max="100"
         app:min="-100"
-        app:gap="0"
-        app:seekToTouch="true"
-        app:stepCount="15"
         app:progressBackground="#E9E9E9"
+        app:progressBackgroundHeight="1dp"
         app:progressColor="@color/colorAccent"
         app:progressHeight="5dp"
-        app:progressBackgroundHeight="1dp"
+        app:seekToTouch="true"
         app:shadowColor="#19000000"
         app:shadowOffsetX="0dp"
         app:shadowOffsetY="2dp"
-        app:shadowRadius="5dp"/>
+        app:shadowRadius="5dp"
+        app:stepCount="15" />
 
 
     <TextView
@@ -42,11 +39,10 @@
         android:layout_height="wrap_content" />
 
 
-
     <Button
         android:id="@+id/btr_change"
-        android:text="该边"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="该边" />
 
 </LinearLayout>
