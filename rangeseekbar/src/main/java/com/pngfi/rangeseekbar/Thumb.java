@@ -34,7 +34,7 @@ public class Thumb {
     private int stepCount;
 
     //the progress value of per stepProgress
-    private float stepProgress = 1;
+    private float stepProgress = 1f;
 
 
     private Paint shadowPaint;
@@ -79,7 +79,7 @@ public class Thumb {
         this.top = top;
         this.progressWidth = progressWidth;
 
-        refreshThumbLocation();
+        refreshLocation();
     }
 
 
@@ -88,6 +88,8 @@ public class Thumb {
             throw new IllegalArgumentException("progress must be between min and max ");
         }
         int cStep = (int) ((progress - min) / stepProgress);
+        if ((progress-cStep*stepProgress)>= stepProgress / 2)
+            cStep++;
         setCurrentStep(cStep, false);
     }
 
@@ -100,24 +102,27 @@ public class Thumb {
 
 
     public void setCurrentStep(int cStep, boolean fromUser) {
+        if (cStep==currentStep)
+            return;
         if (cStep < 0)
             cStep = 0;
         if (cStep > stepCount)
             cStep = stepCount;
         currentStep = cStep;
-        refreshThumbLocation();
+        refreshLocation();
         if (onProgressChangeListener != null) {
             onProgressChangeListener.onProgressChanged(this, min + stepProgress * currentStep, fromUser);
         }
     }
 
 
-    private void refreshThumbLocation() {
+    private void refreshLocation() {
         float percent = (currentStep * 1f) / stepCount;
         thumbDrawable.setBounds((int) (left + percent * progressWidth), top, (int) (left + percent * progressWidth + thumbDrawable.getIntrinsicWidth()), top + thumbDrawable.getIntrinsicHeight());
     }
 
 
+    
     public int getCurrentStep() {
         return currentStep;
     }
@@ -128,7 +133,7 @@ public class Thumb {
             eventX = left + thumbDrawable.getIntrinsicWidth() / 2;
         }
         if (eventX > left + progressWidth + thumbDrawable.getIntrinsicWidth() / 2) {
-            eventX=left + progressWidth + thumbDrawable.getIntrinsicWidth() / 2;
+            eventX = left + progressWidth + thumbDrawable.getIntrinsicWidth() / 2;
         }
         int cStep = 0;
         if (Float.valueOf(0f).equals(eventY)) {

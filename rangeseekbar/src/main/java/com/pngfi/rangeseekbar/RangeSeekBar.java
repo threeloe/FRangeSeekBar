@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 
-
 /**
  * Created by pngfi on 2018/1/6.
  */
@@ -28,8 +27,6 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
 
     private static final int DEFAULT_LINE_HEIGHT = 5; //dp
-
-
 
 
     //the lesser thumb
@@ -85,7 +82,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         this(context, null);
     }
 
-    public RangeSeekBar(Context context,  AttributeSet attrs) {
+    public RangeSeekBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
@@ -155,8 +152,8 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        mCenterY = (getPaddingTop()+(getHeight()-getPaddingBottom())) / 2;
-        mProgressLine = new RectF(mLesserThumb.getWidth() / 2-getPaddingLeft(), mCenterY - mProgressBackgroundHeight / 2, getWidth() - mLesserThumb.getWidth() / 2-getPaddingRight(), mCenterY + mProgressBackgroundHeight / 2);
+        mCenterY = (getPaddingTop() + (getHeight() - getPaddingBottom())) / 2;
+        mProgressLine = new RectF(mLesserThumb.getWidth() / 2 - getPaddingLeft(), mCenterY - mProgressBackgroundHeight / 2, getWidth() - mLesserThumb.getWidth() / 2 - getPaddingRight(), mCenterY + mProgressBackgroundHeight / 2);
 
         mLesserThumb.setRect((int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth() / 2, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
         mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
@@ -185,10 +182,10 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
 
     /**
-     * called after
-     *
-     * @param lesserProgress
-     * @param largerProgress
+     * set progress of the lesser thumb and larger thumb,the progress value will be replaced by
+     * the proximate step value.
+     * @param lesserProgress the progress of lessThumb
+     * @param largerProgress the progress of largerThumb
      */
     public void setProgress(float lesserProgress, float largerProgress) {
         if (lesserProgress > largerProgress) {
@@ -196,7 +193,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         }
         mLesserThumb.setProgress(lesserProgress);
         mLargerThumb.setProgress(largerProgress);
-        invalidate();
+        postInvalidate();
     }
 
 
@@ -206,7 +203,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mTouchDownX = event.getX();
-                mLastTouchX = event.getX();
+                mLastTouchX = mTouchDownX;
                 if (mLesserThumb.contains(event.getX(), event.getY())) {
                     mIsDragging = true;
                     mSlidingThumb = mLesserThumb;
@@ -222,20 +219,17 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                     mLastTouchX = event.getX();
                     if (mSlidingThumb == mLesserThumb) {
                         int lessStep = mLesserThumb.calculateStep(event.getX(), 0f);
-                        if (lessStep > mLargerThumb.getCurrentStep() - mGap && dx > 0) {
+                        if (lessStep > mLargerThumb.getCurrentStep() - mGap) {
                             mSlidingThumb = mLargerThumb;
                         } else {
-                            if (lessStep <= mLargerThumb.getCurrentStep() - mGap) {
-                                mSlidingThumb.setCurrentStep(lessStep, true);
-                            }
+                            mSlidingThumb.setCurrentStep(lessStep, true);
                         }
                     } else {
                         int largerStep = mLargerThumb.calculateStep(event.getX(), 0f);
-                        if (largerStep < mLesserThumb.getCurrentStep() + mGap && dx < 0) {
+                        if (largerStep < mLesserThumb.getCurrentStep() + mGap) {
                             mSlidingThumb = mLesserThumb;
                         } else {
-                            if (largerStep >= mLesserThumb.getCurrentStep() + mGap)
-                                mSlidingThumb.setCurrentStep(largerStep, true);
+                            mSlidingThumb.setCurrentStep(largerStep, true);
                         }
                     }
                     invalidate();

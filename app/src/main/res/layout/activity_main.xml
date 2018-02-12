@@ -18,9 +18,9 @@
         android:paddingLeft="0dp"
         android:paddingRight="40dp"
         android:paddingTop="20dp"
-        app:gap="0"
-        app:max="100"
-        app:min="-100"
+        app:gap="1"
+        app:max="1"
+        app:min="0"
         app:progressBackground="#E9E9E9"
         app:progressBackgroundHeight="1dp"
         app:progressColor="@color/colorAccent"
@@ -30,7 +30,7 @@
         app:shadowOffsetX="0dp"
         app:shadowOffsetY="2dp"
         app:shadowRadius="5dp"
-        app:stepCount="15" />
+        app:stepCount="5" />
 
 
     <TextView
