@@ -28,8 +28,6 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
     private static final int DEFAULT_LINE_HEIGHT = 5; //dp
 
-    private static final int SLIDING_MODE_CONTINUOUS=0;
-    private static final int SLIDING_MODE_DISCRETE=1;
 
     //the lesser thumb
     private Thumb mLesserThumb;
@@ -118,7 +116,6 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         mLargerThumb.setStepCount(stepCount);
         mSeekToTouch = ta.getBoolean(R.styleable.RangeSeekBar_seekToTouch, true);
         mGap = ta.getInt(R.styleable.RangeSeekBar_gap, 0);
-        mSlidingMode=ta.getInt(R.styleable.RangeSeekBar_slidingMode,SLIDING_MODE_CONTINUOUS);
         ta.recycle();
         mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);

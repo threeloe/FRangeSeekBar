@@ -10,10 +10,6 @@
         <attr name="progressColor" format="color" />
         <attr name="progressHeight" format="dimension" />
 
-        <attr name="orientation" format="enum">
-            <enum name="horizontal" value="0" />
-            <enum name="vertical" value="1" />
-        </attr>
 
         <attr name="thumb" format="reference" />
         <attr name="stepCount" format="integer" />
@@ -25,10 +21,6 @@
         <attr name="shadowColor" format="color" />
 
         <attr name="seekToTouch" format="boolean"/>
-        <attr name="slidingMode" format="enum">
-            <enum name="continuous" value="0"/>
-            <enum name="discrete" value="1"/>
-        </attr>
     </declare-styleable>
 
 </resources>
