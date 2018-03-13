@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -93,7 +94,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         mProgressBackground = ta.getColor(R.styleable.RangeSeekBar_progressBackground, Color.GRAY);
         mProgressColor = ta.getColor(R.styleable.RangeSeekBar_progressColor, Color.YELLOW);
         mProgressBackgroundHeight = ta.getDimension(R.styleable.RangeSeekBar_progressBackgroundHeight, dp2px(DEFAULT_LINE_HEIGHT));
-        Drawable drawable = ta.hasValue(R.styleable.RangeSeekBar_thumb) ? ta.getDrawable(R.styleable.RangeSeekBar_thumb) : getResources().getDrawable(R.drawable.ic_thumb);
+        Drawable drawable = ta.hasValue(R.styleable.RangeSeekBar_thumb) ? ta.getDrawable(R.styleable.RangeSeekBar_thumb) : getResources().getDrawable(R.drawable.default_thumb);
         float min = ta.getFloat(R.styleable.RangeSeekBar_min, 0);
         float max = ta.getFloat(R.styleable.RangeSeekBar_max, 100);
         if (max <= min) {
@@ -156,7 +157,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         mProgressLine = new RectF(mLesserThumb.getWidth() / 2 - getPaddingLeft(), mCenterY - mProgressBackgroundHeight / 2, getWidth() - mLesserThumb.getWidth() / 2 - getPaddingRight(), mCenterY + mProgressBackgroundHeight / 2);
 
         mLesserThumb.setRect((int) mProgressLine.left, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
-        mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight() , mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
+        mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight(), mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
     }
 
 
@@ -184,6 +185,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     /**
      * set progress of the lesser thumb and larger thumb,the progress value will be replaced by
      * the proximate step value.
+     *
      * @param lesserProgress the progress of lessThumb
      * @param largerProgress the progress of largerThumb
      */
@@ -212,21 +214,28 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                 } else {
                     mIsDragging = false;
                 }
+                if (mIsDragging){
+                    mSlidingThumb.onPressed(true);
+                }
             case MotionEvent.ACTION_MOVE:
                 if (mIsDragging) {
                     if (mSlidingThumb == mLesserThumb) {
                         int lessStep = mLesserThumb.calculateStep(event.getX(), 0f);
                         if (lessStep > mLargerThumb.getCurrentStep() - mGap) {
                             mSlidingThumb = mLargerThumb;
+                            mLargerThumb.onPressed(true);
+                            mLesserThumb.onPressed(false);
                         } else {
-                            mSlidingThumb.setCurrentStep(lessStep, true,false);
+                            mSlidingThumb.setCurrentStep(lessStep, true, false);
                         }
                     } else {
                         int largerStep = mLargerThumb.calculateStep(event.getX(), 0f);
                         if (largerStep < mLesserThumb.getCurrentStep() + mGap) {
                             mSlidingThumb = mLesserThumb;
+                            mLesserThumb.onPressed(true);
+                            mLargerThumb.onPressed(false);
                         } else {
-                            mSlidingThumb.setCurrentStep(largerStep, true,false);
+                            mSlidingThumb.setCurrentStep(largerStep, true, false);
                         }
                     }
                     invalidate();
@@ -235,6 +244,10 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
             case MotionEvent.ACTION_UP:
                 if (Math.abs(event.getX() - mTouchDownX) < mScaledTouchSlop && !mIsDragging && mSeekToTouch) {
                     seekToTouch(event.getX());
+                }
+                if (mIsDragging){
+                    mSlidingThumb.onPressed(false);
+                    invalidate();
                 }
                 mIsDragging = false;
                 break;
@@ -245,17 +258,18 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     }
 
 
+
     private void seekToTouch(float touchUpX) {
         float lesserDistance = Math.abs(touchUpX - mLesserThumb.getCenterPoint().x);
         float largerDistance = Math.abs((touchUpX - mLargerThumb.getCenterPoint().x));
         if (lesserDistance < largerDistance) {
             int lessStep = mLesserThumb.calculateStep(touchUpX, 0f);
             lessStep = Math.min(lessStep, mLargerThumb.getCurrentStep() - mGap);
-            mLesserThumb.setCurrentStep(lessStep, true,true);
+            mLesserThumb.setCurrentStep(lessStep, true, true);
         } else {
             int largerStep = mLargerThumb.calculateStep(touchUpX, 0f);
             largerStep = Math.max(largerStep, mLesserThumb.getCurrentStep() + mGap);
-            mLargerThumb.setCurrentStep(largerStep, true,true);
+            mLargerThumb.setCurrentStep(largerStep, true, true);
         }
         invalidate();
     }
@@ -291,8 +305,8 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     protected void onRestoreInstanceState(Parcelable state) {
         RangeSeekBarState rs = (RangeSeekBarState) state;
         super.onRestoreInstanceState(((RangeSeekBarState) state).getSuperState());
-        mLesserThumb.setCurrentStep(rs.lesserStep, false,false);
-        mLargerThumb.setCurrentStep(rs.largerStep, false,false);
+        mLesserThumb.setCurrentStep(rs.lesserStep, false, false);
+        mLargerThumb.setCurrentStep(rs.largerStep, false, false);
     }
 
 

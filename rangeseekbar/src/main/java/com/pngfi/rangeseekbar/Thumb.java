@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 
 
 public class Thumb {
@@ -93,6 +94,19 @@ public class Thumb {
         if ((progress - cStep * stepProgress) >= stepProgress / 2)
             cStep++;
         setCurrentStep(cStep, false,true);
+    }
+
+     public void onPressed(boolean pressed) {
+        int[] pressedState = new int[]{android.R.attr.state_pressed};
+        int[] noState=new int[]{};
+        if (thumbDrawable instanceof StateListDrawable) {
+            if (pressed) {
+                thumbDrawable.setState(pressedState);
+            }else {
+                thumbDrawable.setState(noState);
+            }
+        }
+
     }
 
 
