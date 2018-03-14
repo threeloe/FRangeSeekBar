@@ -48,7 +48,6 @@
         app:gap="1"
         app:max="1"
         app:min="0"
-        app:thumb="@drawable/ic_thumb"
         app:progressBackground="#E9E9E9"
         app:progressBackgroundHeight="5dp"
         app:progressColor="#F38D39"
@@ -58,6 +57,27 @@
         app:shadowOffsetX="0dp"
         app:shadowOffsetY="2dp"
         app:shadowRadius="5dp"
-        app:stepCount="100" />
+        app:stepCount="100"
+        app:thumb="@drawable/ic_thumb" />
+
+    <com.pngfi.rangeseekbar.RangeSeekBar
+        android:id="@+id/seek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:gap="0"
+        app:max="100"
+        app:min="0"
+        app:progressBackground="#E9E9E9"
+        app:progressBackgroundHeight="1dp"
+        app:progressColor="@color/colorAccent"
+        app:progressHeight="5dp"
+        app:seekToTouch="true"
+        app:shadowColor="#48FF4081"
+        app:shadowOffsetX="0dp"
+        app:shadowOffsetY="2dp"
+        app:shadowRadius="5dp"
+        app:stepCount="20" />
+
 
 </LinearLayout>
