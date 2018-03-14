@@ -99,6 +99,7 @@ public class Thumb {
      public void onPressed(boolean pressed) {
         int[] pressedState = new int[]{android.R.attr.state_pressed};
         int[] noState=new int[]{};
+        thumbDrawable.getState();
         if (thumbDrawable instanceof StateListDrawable) {
             if (pressed) {
                 thumbDrawable.setState(pressedState);

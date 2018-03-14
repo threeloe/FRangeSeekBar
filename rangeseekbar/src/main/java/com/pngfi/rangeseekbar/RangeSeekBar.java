@@ -224,18 +224,18 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                         int lessStep = mLesserThumb.calculateStep(event.getX());
                         if (lessStep > mLargerThumb.getCurrentStep() - mGap) {
                             mSlidingThumb = mLargerThumb;
-                            mLargerThumb.onPressed(true);
-                            mLesserThumb.onPressed(false);
                         } else {
+                            mLesserThumb.onPressed(true);
+                            mLargerThumb.onPressed(false);
                             mSlidingThumb.setCurrentStep(lessStep, true, false);
                         }
                     } else if (mSlidingThumb==mLargerThumb){
                         int largerStep = mLargerThumb.calculateStep(event.getX());
                         if (largerStep < mLesserThumb.getCurrentStep() + mGap) {
                             mSlidingThumb = mLesserThumb;
-                            mLesserThumb.onPressed(true);
-                            mLargerThumb.onPressed(false);
                         } else {
+                             mLargerThumb.onPressed(true);
+                            mLesserThumb.onPressed(false);
                             mSlidingThumb.setCurrentStep(largerStep, true, false);
                         }
                     }
