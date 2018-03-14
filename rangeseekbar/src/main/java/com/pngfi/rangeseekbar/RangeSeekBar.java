@@ -221,7 +221,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
             case MotionEvent.ACTION_MOVE:
                 if (mIsDragging) {
                     if (mSlidingThumb == mLesserThumb) {
-                        int lessStep = mLesserThumb.calculateStep(event.getX(), 0f);
+                        int lessStep = mLesserThumb.calculateStep(event.getX());
                         if (lessStep > mLargerThumb.getCurrentStep() - mGap) {
                             mSlidingThumb = mLargerThumb;
                             mLargerThumb.onPressed(true);
@@ -229,8 +229,8 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                         } else {
                             mSlidingThumb.setCurrentStep(lessStep, true, false);
                         }
-                    } else {
-                        int largerStep = mLargerThumb.calculateStep(event.getX(), 0f);
+                    } else if (mSlidingThumb==mLargerThumb){
+                        int largerStep = mLargerThumb.calculateStep(event.getX());
                         if (largerStep < mLesserThumb.getCurrentStep() + mGap) {
                             mSlidingThumb = mLesserThumb;
                             mLesserThumb.onPressed(true);
@@ -264,11 +264,11 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         float lesserDistance = Math.abs(touchUpX - mLesserThumb.getCenterPoint().x);
         float largerDistance = Math.abs((touchUpX - mLargerThumb.getCenterPoint().x));
         if (lesserDistance < largerDistance) {
-            int lessStep = mLesserThumb.calculateStep(touchUpX, 0f);
+            int lessStep = mLesserThumb.calculateStep(touchUpX);
             lessStep = Math.min(lessStep, mLargerThumb.getCurrentStep() - mGap);
             mLesserThumb.setCurrentStep(lessStep, true, true);
         } else {
-            int largerStep = mLargerThumb.calculateStep(touchUpX, 0f);
+            int largerStep = mLargerThumb.calculateStep(touchUpX);
             largerStep = Math.max(largerStep, mLesserThumb.getCurrentStep() + mGap);
             mLargerThumb.setCurrentStep(largerStep, true, true);
         }

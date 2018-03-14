@@ -11,13 +11,8 @@
     <com.pngfi.rangeseekbar.RangeSeekBar
         android:id="@+id/seekbar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="100dp"
-        android:background="@color/colorPrimary"
-        android:paddingBottom="40dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="40dp"
-        android:paddingTop="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         app:gap="1"
         app:max="1"
         app:min="0"
@@ -44,5 +39,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="该边" />
+
+    <com.pngfi.rangeseekbar.RangeSeekBar
+        android:id="@+id/rsb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:gap="1"
+        app:max="1"
+        app:min="0"
+        app:thumb="@drawable/ic_thumb"
+        app:progressBackground="#E9E9E9"
+        app:progressBackgroundHeight="5dp"
+        app:progressColor="#F38D39"
+        app:progressHeight="5dp"
+        app:seekToTouch="true"
+        app:shadowColor="#19000000"
+        app:shadowOffsetX="0dp"
+        app:shadowOffsetY="2dp"
+        app:shadowRadius="5dp"
+        app:stepCount="100" />
 
 </LinearLayout>

@@ -155,7 +155,7 @@ public class Thumb {
     }
 
 
-    public int calculateStep(float eventX, float eventY) {
+    public int calculateStep(float eventX) {
         if (eventX < left ) {
             eventX = left ;
         }
@@ -163,14 +163,12 @@ public class Thumb {
             eventX = left + progressWidth ;
         }
         int cStep = 0;
-        if (Float.valueOf(0f).equals(eventY)) {
             Float offset = (eventX - left ) / progressWidth * (max - min);
             float mod = offset % stepProgress;
             cStep = (int) (offset / stepProgress);
             if (Math.abs(mod) > stepProgress / 2) {
                 cStep++;
             }
-        }
         return cStep;
     }
 
