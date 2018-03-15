@@ -28,7 +28,7 @@ captures/
 
 .idea
 *.iml
-
+upload.sh
 # Freeline
 freeline.py
 freeline/

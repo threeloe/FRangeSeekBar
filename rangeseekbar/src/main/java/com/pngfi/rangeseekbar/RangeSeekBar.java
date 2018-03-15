@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -90,13 +89,13 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     public RangeSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, defStyleAttr, 0);
-        mProgressHeight = ta.getDimension(R.styleable.RangeSeekBar_progressHeight, dp2px(DEFAULT_LINE_HEIGHT));
-        mProgressBackground = ta.getColor(R.styleable.RangeSeekBar_progressBackground, Color.GRAY);
-        mProgressColor = ta.getColor(R.styleable.RangeSeekBar_progressColor, Color.YELLOW);
-        mProgressBackgroundHeight = ta.getDimension(R.styleable.RangeSeekBar_progressBackgroundHeight, dp2px(DEFAULT_LINE_HEIGHT));
-        Drawable drawable = ta.hasValue(R.styleable.RangeSeekBar_thumb) ? ta.getDrawable(R.styleable.RangeSeekBar_thumb) : getResources().getDrawable(R.drawable.default_thumb);
-        float min = ta.getFloat(R.styleable.RangeSeekBar_min, 0);
-        float max = ta.getFloat(R.styleable.RangeSeekBar_max, 100);
+        mProgressHeight = ta.getDimension(R.styleable.RangeSeekBar_rb_progressHeight, dp2px(DEFAULT_LINE_HEIGHT));
+        mProgressBackground = ta.getColor(R.styleable.RangeSeekBar_rb_progressBackground, Color.GRAY);
+        mProgressColor = ta.getColor(R.styleable.RangeSeekBar_rb_progressColor, Color.YELLOW);
+        mProgressBackgroundHeight = ta.getDimension(R.styleable.RangeSeekBar_rb_progressBackgroundHeight, dp2px(DEFAULT_LINE_HEIGHT));
+        Drawable drawable = ta.hasValue(R.styleable.RangeSeekBar_rb_thumb) ? ta.getDrawable(R.styleable.RangeSeekBar_rb_thumb) : getResources().getDrawable(R.drawable.default_thumb);
+        float min = ta.getFloat(R.styleable.RangeSeekBar_rb_min, 0);
+        float max = ta.getFloat(R.styleable.RangeSeekBar_rb_max, 100);
         if (max <= min) {
             throw new IllegalArgumentException("max must be greater than min");
         }
@@ -105,18 +104,18 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         mLesserThumb.setOnProgressChangeListener(this);
         mLargerThumb.setOnProgressChangeListener(this);
 
-        int shadowRadius = (int) ta.getDimension(R.styleable.RangeSeekBar_shadowRadius, 0);
-        int shadowColor = ta.getColor(R.styleable.RangeSeekBar_shadowColor, Color.TRANSPARENT);
-        int shadowOffsetX = (int) ta.getDimension(R.styleable.RangeSeekBar_shadowOffsetX, 0);
-        int shadowOffsetY = ta.getDimensionPixelOffset(R.styleable.RangeSeekBar_shadowOffsetY, 0);
+        int shadowRadius = (int) ta.getDimension(R.styleable.RangeSeekBar_rb_shadowRadius, 0);
+        int shadowColor = ta.getColor(R.styleable.RangeSeekBar_rb_shadowColor, Color.TRANSPARENT);
+        int shadowOffsetX = (int) ta.getDimension(R.styleable.RangeSeekBar_rb_shadowOffsetX, 0);
+        int shadowOffsetY = ta.getDimensionPixelOffset(R.styleable.RangeSeekBar_rb_shadowOffsetY, 0);
         mLesserThumb.setShadow(shadowRadius, shadowOffsetX, shadowOffsetY, shadowColor);
         mLargerThumb.setShadow(shadowRadius, shadowOffsetX, shadowOffsetY, shadowColor);
 
-        int stepCount = ta.getInt(R.styleable.RangeSeekBar_stepCount, 0);
+        int stepCount = ta.getInt(R.styleable.RangeSeekBar_rb_stepCount, 0);
         mLesserThumb.setStepCount(stepCount);
         mLargerThumb.setStepCount(stepCount);
-        mSeekToTouch = ta.getBoolean(R.styleable.RangeSeekBar_seekToTouch, true);
-        mGap = ta.getInt(R.styleable.RangeSeekBar_gap, 0);
+        mSeekToTouch = ta.getBoolean(R.styleable.RangeSeekBar_rb_seekToTouch, true);
+        mGap = ta.getInt(R.styleable.RangeSeekBar_rb_gap, 0);
         ta.recycle();
         mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);

@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <declare-styleable name="RangeSeekBar">
-        <attr name="max" format="float" />
-        <attr name="min" format="float" />
-        <attr name="progressBackground" format="color" />
-        <attr name="progressBackgroundHeight" format="dimension"/>
+        <attr name="rb_max" format="float" />
+        <attr name="rb_min" format="float" />
+        <attr name="rb_progressBackground" format="color" />
+        <attr name="rb_progressBackgroundHeight" format="dimension"/>
 
-        <attr name="progressColor" format="color" />
-        <attr name="progressHeight" format="dimension" />
+        <attr name="rb_progressColor" format="color" />
+        <attr name="rb_progressHeight" format="dimension" />
 
 
-        <attr name="thumb" format="reference" />
-        <attr name="stepCount" format="integer" />
-        <attr name="gap" format="integer" />
+        <attr name="rb_thumb" format="reference" />
+        <attr name="rb_stepCount" format="integer" />
+        <attr name="rb_gap" format="integer" />
 
-        <attr name="shadowRadius" format="dimension" />
-        <attr name="shadowOffsetX" format="dimension" />
-        <attr name="shadowOffsetY" format="dimension" />
-        <attr name="shadowColor" format="color" />
+        <attr name="rb_shadowRadius" format="dimension" />
+        <attr name="rb_shadowOffsetX" format="dimension" />
+        <attr name="rb_shadowOffsetY" format="dimension" />
+        <attr name="rb_shadowColor" format="color" />
 
-        <attr name="seekToTouch" format="boolean"/>
+        <attr name="rb_seekToTouch" format="boolean"/>
     </declare-styleable>
 
 </resources>
