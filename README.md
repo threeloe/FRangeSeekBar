@@ -4,7 +4,13 @@
 **A flexible range seek bar for Android api 11+,  its thumb supports shadow and multiple drawable.
 `star` or `pull request` will be welcomed**
 ****
-
+##Download
+The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/maven/rangeseekbar/images/download.svg)](https://bintray.com/pngfi/maven/rangeseekbar/_latestVersion)
+```groovy
+  dependencies {
+     // compile 'com.pngfi.rangeseekbar:${LATEST_VERSION}'
+  }
+```
 ##Usage
 ```
    <com.pngfi.rangeseekbar.RangeSeekBar
