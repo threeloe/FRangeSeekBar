@@ -4,14 +4,23 @@
 **A flexible range seek bar for Android api 11+,  its thumb supports shadow and multiple drawable.
 `star` or `pull request` will be welcomed**
 ****
-##Download
+
+## Feature
+- smooth sliding experience that can switch from left thumb to right thumb.
+- provide a customized shadow effect.
+- can seek to the location where user click.
+
+## Screen shot
+
+
+## Download
 The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/maven/rangeseekbar/images/download.svg)](https://bintray.com/pngfi/maven/rangeseekbar/_latestVersion)
 ```groovy
   dependencies {
-     // compile 'com.pngfi.rangeseekbar:${LATEST_VERSION}'
+     compile 'com.pngfi.rangeseekbar:${LATEST_VERSION}'
   }
 ```
-##Usage
+## Usage
 ```
    <com.pngfi.rangeseekbar.RangeSeekBar
         android:id="@+id/seek"
@@ -34,7 +43,7 @@ The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/mave
 
 ```
 
-##Attr
+## Attr
  attr | format | desc
   -------- | ---|---
   rb_max|float|the max value of progress,default 100

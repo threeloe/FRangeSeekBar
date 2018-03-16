@@ -4,80 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context="com.pngfi.demo.MainActivity">
+
+    <TextView
+        android:id="@+id/tv_first_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorAccent" />
 
 
     <com.pngfi.rangeseekbar.RangeSeekBar
-        android:id="@+id/seekbar"
+        android:id="@+id/first"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        app:gap="1"
-        app:max="1"
-        app:min="0"
-        app:progressBackground="#E9E9E9"
-        app:progressBackgroundHeight="1dp"
-        app:progressColor="@color/colorAccent"
-        app:progressHeight="5dp"
-        app:seekToTouch="true"
-        app:shadowColor="#19000000"
-        app:shadowOffsetX="0dp"
-        app:shadowOffsetY="2dp"
-        app:shadowRadius="5dp"
-        app:stepCount="5" />
+        android:layout_marginTop="20dp"
+        app:rb_gap="1"
+        app:rb_max="10"
+        app:rb_min="-10"
+        app:rb_progressBackground="#E9E9E9"
+        app:rb_progressBackgroundHeight="1dp"
+        app:rb_progressColor="@color/colorAccent"
+        app:rb_progressHeight="5dp"
+        app:rb_seekToTouch="true"
+        app:rb_shadowColor="#19000000"
+        app:rb_shadowOffsetX="0dp"
+        app:rb_shadowOffsetY="2dp"
+        app:rb_shadowRadius="5dp"
+        app:rb_stepCount="10" />
 
 
     <TextView
-        android:id="@+id/tv_value"
+        android:id="@+id/tv_second_value"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:textColor="#F38D39" />
+
+
+    <com.pngfi.rangeseekbar.RangeSeekBar
+        android:id="@+id/second"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:rb_gap="1"
+        app:rb_max="1"
+        app:rb_min="0"
+        app:rb_progressBackground="#E9E9E9"
+        app:rb_progressBackgroundHeight="5dp"
+        app:rb_progressColor="#F38D39"
+        app:rb_progressHeight="5dp"
+        app:rb_seekToTouch="true"
+        app:rb_shadowColor="#19000000"
+        app:rb_shadowOffsetX="0dp"
+        app:rb_shadowOffsetY="2dp"
+        app:rb_shadowRadius="5dp"
+        app:rb_stepCount="100"
+        app:rb_thumb="@drawable/ic_thumb" />
+  <TextView
+        android:id="@+id/tv_third_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:textColor="@color/colorAccent" />
+
+    <com.pngfi.rangeseekbar.RangeSeekBar
+        android:id="@+id/third"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:rb_gap="0"
+        app:rb_max="100"
+        app:rb_min="0"
+        app:rb_progressBackground="#E9E9E9"
+        app:rb_progressBackgroundHeight="1dp"
+        app:rb_progressColor="@color/colorAccent"
+        app:rb_progressHeight="5dp"
+        app:rb_shadowColor="#48FF4081"
+        app:rb_seekToTouch="false"
+        app:rb_shadowOffsetX="0dp"
+        app:rb_shadowOffsetY="2dp"
+        app:rb_shadowRadius="5dp"
+        app:rb_stepCount="20" />
 
 
     <Button
-        android:id="@+id/btr_change"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="该边" />
-
-    <com.pngfi.rangeseekbar.RangeSeekBar
-        android:id="@+id/rsb"
+        android:id="@+id/btn_change"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        app:gap="1"
-        app:max="1"
-        app:min="0"
-        app:progressBackground="#E9E9E9"
-        app:progressBackgroundHeight="5dp"
-        app:progressColor="#F38D39"
-        app:progressHeight="5dp"
-        app:seekToTouch="true"
-        app:shadowColor="#19000000"
-        app:shadowOffsetX="0dp"
-        app:shadowOffsetY="2dp"
-        app:shadowRadius="5dp"
-        app:stepCount="100"
-        app:thumb="@drawable/ic_thumb" />
-
-    <com.pngfi.rangeseekbar.RangeSeekBar
-        android:id="@+id/seek"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        app:gap="0"
-        app:max="100"
-        app:min="0"
-        app:progressBackground="#E9E9E9"
-        app:progressBackgroundHeight="1dp"
-        app:progressColor="@color/colorAccent"
-        app:progressHeight="5dp"
-        app:seekToTouch="true"
-        app:shadowColor="#48FF4081"
-        app:shadowOffsetX="0dp"
-        app:shadowOffsetY="2dp"
-        app:shadowRadius="5dp"
-        app:stepCount="20" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:text="SET RANDOM PROGRESS" />
 
 
 </LinearLayout>
