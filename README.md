@@ -43,6 +43,21 @@ The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/mave
 
 ```
 
+listening the progress changes
+```
+ seekBar.setOnSeekBarChangeListener(new RangeSeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(RangeSeekBar seekBar, float lesserProgress, float largerProgress, boolean fromUser) {
+                tv.setText((int) lesserProgress+" to "+(int)largerProgress);
+            }
+        });
+```
+
+change the progress
+```
+ third.setProgress(lesser,larger);
+```
+
 ## Attr
  attr | format | desc
   -------- | ---|---
