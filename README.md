@@ -11,7 +11,7 @@
 - can seek to the location where user click.
 
 ## Screen shot
-
+![demo.gif](https://github.com/pngfi/RangeSeekBar/blob/master/gif/demo.gif)
 
 ## Download
 The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/maven/rangeseekbar/images/download.svg)](https://bintray.com/pngfi/maven/rangeseekbar/_latestVersion)
