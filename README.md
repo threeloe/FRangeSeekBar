@@ -31,17 +31,18 @@
 ##Attr
  attr | format | desc
   -------- | ---|---
-  rb_max|float|min, max, progress
-  rb_min|float|min, max, progress
-  rb_progressBackground|color|all attrs
-  rb_progressBackgroundHeight|dimension|all attrs
-  rb_progressColor|xml|min, max, progress
-  rb_progressHeight||
-  rb_thumb|xml, java|all attrs
-  rb_stepCount|xml|min, max, progress
-  rb_gap|xml, java|all attrs
-  rb_seekToTouch|xml|min, max, progress
-  rb_shadowRadius|xml, java|all attrs
-  rb_shadowOffsetX|xml|min, max, progress
-  rb_shadowOffsetY|xml, java|all attrs
-  rb_shadowColor|xml|min, max, progress
+  rb_max|float|the max value of progress,default 100
+  rb_min|float|the min value of progress,default 0
+  rb_progressBackground|color|the background color of progress bar
+  rb_progressBackgroundHeight|dimension|background height
+  rb_progressColor|color|the progress color
+  rb_progressHeight|dimension|the height of progress bar
+  rb_thumb|drawable|the drawable resource of SeekBar button, support multiple drawable. note:the StateListDrawable only support pressed state.
+  rb_stepCount|positive integer|the progress is divided into many `step`s, this is the count of steps, had better assign it.
+  rb_gap|positive integer|the minimal step count between two thumbs,default 0.
+  rb_seekToTouch|boolean|the thumb will seek to the location where user click if true,default true.
+  rb_shadowColor|color|shadow color around thumb
+  rb_shadowRadius|dimension|shadow radius
+  rb_shadowOffsetX|dimension|horizontal offset of shadow
+  rb_shadowOffsetY|dimension|vertical offset  of shadow
+
