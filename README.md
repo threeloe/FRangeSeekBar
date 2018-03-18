@@ -53,7 +53,7 @@ listening the progress changes
         });
 ```
 
-change the progress 
+change the progress
 ```
  third.setProgress(lesser,larger);
 ```
