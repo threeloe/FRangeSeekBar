@@ -157,7 +157,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
         mLesserThumb.setRect((int) mProgressLine.left, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
         mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight(), mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
-        mLargerThumb.setCurrentStep(mLesserThumb.getCurrentStep()+mGap,false,false);
+        mLargerThumb.setCurrentStep(mLesserThumb.getCurrentStep() + mGap, false, false);
     }
 
 
@@ -214,26 +214,29 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                 } else {
                     mIsDragging = false;
                 }
-                if (mIsDragging){
+                if (mIsDragging) {
                     mSlidingThumb.onPressed(true);
                 }
             case MotionEvent.ACTION_MOVE:
                 if (mIsDragging) {
                     if (mSlidingThumb == mLesserThumb) {
                         int lessStep = mLesserThumb.calculateStep(event.getX());
-                        if (lessStep > mLargerThumb.getCurrentStep() - mGap) {
+                        if (lessStep>mLargerThumb.getCurrentStep()-mGap) {
                             mSlidingThumb = mLargerThumb;
+                            //prevent sliding too fast
+                            mLesserThumb.setCurrentStep(mLargerThumb.getCurrentStep()-mGap,true,false);
                         } else {
                             mLesserThumb.onPressed(true);
                             mLargerThumb.onPressed(false);
                             mSlidingThumb.setCurrentStep(lessStep, true, false);
                         }
-                    } else if (mSlidingThumb==mLargerThumb){
+                    } else if (mSlidingThumb == mLargerThumb) {
                         int largerStep = mLargerThumb.calculateStep(event.getX());
-                        if (largerStep < mLesserThumb.getCurrentStep() + mGap) {
+                        if (largerStep < mLesserThumb.getCurrentStep() + mGap ) {
                             mSlidingThumb = mLesserThumb;
+                            mLargerThumb.setCurrentStep(mLesserThumb.getCurrentStep()+mGap,true,false);
                         } else {
-                             mLargerThumb.onPressed(true);
+                            mLargerThumb.onPressed(true);
                             mLesserThumb.onPressed(false);
                             mSlidingThumb.setCurrentStep(largerStep, true, false);
                         }
@@ -245,7 +248,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                 if (Math.abs(event.getX() - mTouchDownX) < mScaledTouchSlop && !mIsDragging && mSeekToTouch) {
                     seekToTouch(event.getX());
                 }
-                if (mIsDragging){
+                if (mIsDragging) {
                     mSlidingThumb.onPressed(false);
                     invalidate();
                 }
@@ -256,7 +259,6 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         }
         return true;
     }
-
 
 
     private void seekToTouch(float touchUpX) {
