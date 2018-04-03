@@ -71,7 +71,6 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
     //the thumb will move to the touch location if true
     private boolean mSeekToTouch;
 
-    private int mSlidingMode;
 
     private float mTouchDownX;
 
@@ -276,6 +275,18 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         invalidate();
     }
 
+
+    /**
+     * @return current progress
+     * the lesserProgress in index 0
+     * the largerProgress in index 1
+     */
+    public float[] getProgress(){
+        float[] progreses=new float[2];
+         progreses[0]=mLesserThumb.getProgress();
+         progreses[1]=mLargerThumb.getProgress();
+         return progreses;
+    }
 
     private float dp2px(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
