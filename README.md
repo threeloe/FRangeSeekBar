@@ -17,7 +17,7 @@
 The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/maven/rangeseekbar/images/download.svg)](https://bintray.com/pngfi/maven/rangeseekbar/_latestVersion)
 ```groovy
   dependencies {
-     compile 'com.pngfi.rangeseekbar:${LATEST_VERSION}'
+     compile 'com.pngfi:rangeseekbar:${LATEST_VERSION}'
   }
 ```
 ## Usage
