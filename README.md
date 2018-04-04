@@ -63,7 +63,7 @@ get the current progress
  float[] progress=seekbar.getProgress();
  float lesserProgress=progress[0];
  float largerProgress=progress[1];
- 
+
 ```
 ## Attr
  attr | format | desc
