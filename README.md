@@ -22,24 +22,25 @@ The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/mave
 ```
 ## Usage
 ```
-   <com.pngfi.rangeseekbar.RangeSeekBar
-        android:id="@+id/seek"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        app:gap="0"
-        app:max="100"
-        app:min="0"
-        app:progressBackground="#E9E9E9"
-        app:progressBackgroundHeight="1dp"
-        app:progressColor="@color/colorAccent"
-        app:progressHeight="5dp"
-        app:seekToTouch="true"
-        app:shadowColor="#48FF4081"
-        app:shadowOffsetX="0dp"
-        app:shadowOffsetY="2dp"
-        app:shadowRadius="5dp"
-        app:stepCount="20" />
+
+ <com.pngfi.rangeseekbar.RangeSeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:rb_gap="1"
+                    app:rb_max="20000"
+                    app:rb_min="0"
+                    app:rb_thumb="@drawable/ic_thumb"
+                    app:rb_progressBackground="#E9E9E9"
+                    app:rb_progressBackgroundHeight="6dp"
+                    app:rb_progressColor="@color/color_accent"
+                    app:rb_progressHeight="6dp"
+                    app:rb_seekToTouch="true"
+                    app:rb_shadowColor="@color/default_shadow_color"
+                    app:rb_shadowOffsetX="0dp"
+                    app:rb_shadowOffsetY="2dp"
+                    app:rb_shadowRadius="5dp"
+                    app:rb_stepCount="200" />
 
 ```
 
@@ -55,7 +56,14 @@ listening the progress changes
 
 change the progress
 ```
- third.setProgress(lesser,larger);
+ seekbar.setProgress(lesser,larger);
+```
+get the current progress
+```
+ float[] progress=seekbar.getProgress();
+ float lesserProgress=progress[0];
+ float largerProgress=progress[1];
+ 
 ```
 ## Attr
  attr | format | desc
