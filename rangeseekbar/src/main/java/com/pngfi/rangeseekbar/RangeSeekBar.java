@@ -203,6 +203,8 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                //prevent sliding conflict
+                getParent().requestDisallowInterceptTouchEvent(true);
                 mTouchDownX = event.getX();
                 if (mLesserThumb.contains(event.getX(), event.getY())) {
                     mIsDragging = true;
