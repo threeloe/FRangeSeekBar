@@ -156,7 +156,10 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
         mLesserThumb.setRect((int) mProgressLine.left, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
         mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight(), mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
-        mLargerThumb.setCurrentStep(mLesserThumb.getCurrentStep() + mGap, false, false);
+        //用户没有设置过进度，初始化
+        if (mLargerThumb.getCurrentStep() < mLesserThumb.getCurrentStep() + mGap) {
+            mLargerThumb.setCurrentStep(mLesserThumb.getCurrentStep() + mGap, false, false);
+        }
     }
 
 
@@ -222,10 +225,10 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                 if (mIsDragging) {
                     if (mSlidingThumb == mLesserThumb) {
                         int lessStep = mLesserThumb.calculateStep(event.getX());
-                        if (lessStep>mLargerThumb.getCurrentStep()-mGap) {
+                        if (lessStep > mLargerThumb.getCurrentStep() - mGap) {
                             mSlidingThumb = mLargerThumb;
                             //prevent sliding too fast
-                            mLesserThumb.setCurrentStep(mLargerThumb.getCurrentStep()-mGap,true,false);
+                            mLesserThumb.setCurrentStep(mLargerThumb.getCurrentStep() - mGap, true, false);
                         } else {
                             mLesserThumb.onPressed(true);
                             mLargerThumb.onPressed(false);
@@ -233,9 +236,9 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
                         }
                     } else if (mSlidingThumb == mLargerThumb) {
                         int largerStep = mLargerThumb.calculateStep(event.getX());
-                        if (largerStep < mLesserThumb.getCurrentStep() + mGap ) {
+                        if (largerStep < mLesserThumb.getCurrentStep() + mGap) {
                             mSlidingThumb = mLesserThumb;
-                            mLargerThumb.setCurrentStep(mLesserThumb.getCurrentStep()+mGap,true,false);
+                            mLargerThumb.setCurrentStep(mLesserThumb.getCurrentStep() + mGap, true, false);
                         } else {
                             mLargerThumb.onPressed(true);
                             mLesserThumb.onPressed(false);
@@ -283,11 +286,11 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
      * the lesserProgress in index 0
      * the largerProgress in index 1
      */
-    public float[] getProgress(){
-        float[] progreses=new float[2];
-         progreses[0]=mLesserThumb.getProgress();
-         progreses[1]=mLargerThumb.getProgress();
-         return progreses;
+    public float[] getProgress() {
+        float[] progreses = new float[2];
+        progreses[0] = mLesserThumb.getProgress();
+        progreses[1] = mLargerThumb.getProgress();
+        return progreses;
     }
 
     private float dp2px(float value) {
