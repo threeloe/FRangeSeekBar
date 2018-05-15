@@ -156,7 +156,7 @@ public class RangeSeekBar extends View implements Thumb.OnProgressChangeListener
 
         mLesserThumb.setRect((int) mProgressLine.left, mCenterY - mLesserThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
         mLargerThumb.setRect((int) mProgressLine.left + mLesserThumb.getThumbDrawable().getIntrinsicHeight(), mCenterY - mLargerThumb.getThumbDrawable().getIntrinsicHeight() / 2, (int) mProgressLine.right - (int) mProgressLine.left - mLesserThumb.getThumbDrawable().getIntrinsicWidth());
-        //用户没有设置过进度，初始化
+        //user no init
         if (mLargerThumb.getCurrentStep() < mLesserThumb.getCurrentStep() + mGap) {
             mLargerThumb.setCurrentStep(mLesserThumb.getCurrentStep() + mGap, false, false);
         }
