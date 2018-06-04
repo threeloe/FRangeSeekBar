@@ -11,13 +11,13 @@
 - can seek to the location where user click.
 
 ## Screen shot
-![demo.gif](https://github.com/pngfi/RangeSeekBar/blob/master/gif/demo.gif)
+![demo.gif](https://github.com/pngfi/RangeSeekBar/blob/master/art/demo.gif)
 
 ## Download
-The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/maven/rangeseekbar/images/download.svg)](https://bintray.com/pngfi/maven/rangeseekbar/_latestVersion)
+The **LATEST_VERSION**: [![Download](https://api.bintray.com/packages/pngfi/maven/frangeseekbar/images/download.svg)](https://bintray.com/pngfi/maven/frangeseekbar/_latestVersion)
 ```groovy
   dependencies {
-     compile 'com.pngfi:rangeseekbar:${LATEST_VERSION}'
+     compile 'com.pngfi:frangeseekbar:${LATEST_VERSION}'
   }
 ```
 ## Usage
